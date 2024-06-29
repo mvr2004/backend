@@ -1,10 +1,10 @@
 // src/routes/userRoutes.js
 const express = require('express');
-const { register, getData, confirmEmail} = require('../controllers/userController');
+const userController = require('../controllers/userController'); // Importando o userController
 const router = express.Router();
 
-router.post('/register', register);
-router.get('/data', getData);
-router.post('/confirmEmail', userController.confirmEmail);
+router.post('/register', userController.register); // Usando userController.register
+router.get('/data', userController.getData); // Usando userController.getData
+router.post('/confirmEmail', userController.confirmEmail); // Usando userController.confirmEmail
 
 module.exports = router;
