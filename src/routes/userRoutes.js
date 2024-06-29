@@ -1,6 +1,6 @@
 // src/routes/userRoutes.js
 const express = require('express');
-const { register, getData } = require('../controllers/userController');
+const { register, getData, confirmEmail} = require('../controllers/userController');
 const router = express.Router();
 
 router.post('/register', register);
