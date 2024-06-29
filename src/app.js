@@ -1,12 +1,14 @@
-// src/app.js
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
+const sharp = require('sharp'); // Importar sharp para manipulação de imagens
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const genericRoutes = require('./routes/genericRoutes');
 const sequelize = require('./config/dbConfig');
 const errorHandler = require('./middleware/errorHandler');
 const dotenv = require('dotenv');
+const path = require('path');
 
 dotenv.config();
 
@@ -15,18 +17,22 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+// Configuração do Multer com sharp para redimensionar imagens
+const storage = multer.memoryStorage(); // Usar memoryStorage para trabalhar com buffers de imagem
+const upload = multer({ 
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Apenas arquivos de imagem são permitidos.'));
+    }
   }
 });
-const upload = multer({ storage: storage });
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/generic', genericRoutes);
 
 app.get('/', (req, res) => {
   res.send('API está a funcionar. Acesse /api/data para obter dados.');
@@ -36,9 +42,24 @@ app.get('/health', (req, res) => {
   res.send('API está funcionando corretamente.');
 });
 
-app.post('/upload', upload.single('file'), (req, res) => {
-  console.log(req.file);
-  res.send('Arquivo enviado com sucesso!');
+app.post('/upload', upload.single('file'), async (req, res) => {
+  try {
+    // Redimensionar a imagem usando sharp
+    const resizedImage = await sharp(req.file.buffer)
+      .resize({ width: 300, height: 300 })
+      .toBuffer();
+
+    // Salvar a imagem redimensionada
+    const filename = Date.now() + '-' + req.file.originalname;
+    const filepath = path.join(__dirname, 'uploads/', filename);
+    await sharp(resizedImage).toFile(filepath);
+
+    console.log('Arquivo enviado:', filename);
+    res.send('Arquivo enviado com sucesso!');
+  } catch (err) {
+    console.error('Erro ao processar imagem:', err);
+    res.status(500).send('Erro ao processar imagem');
+  }
 });
 
 app.use(errorHandler);
