@@ -23,7 +23,22 @@ const User = sequelize.define('User', {
   },
   photoUrl: {
     type: DataTypes.STRING
+  },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  emailConfirmed: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  confirmationCode: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
+}, {
+  // Disable timestamps
+  timestamps: false
 });
 
 module.exports = User;
