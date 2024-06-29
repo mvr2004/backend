@@ -28,7 +28,7 @@ exports.getData = async (req, res) => {
 
 
 exports.confirmEmail = async (req, res) => {
-  const { email, code } = req.body;
+  const { email, code } = req.body; // Extrai email e code do corpo da requisição
   try {
     const success = await confirmEmail(email, code);
     if (success) {
