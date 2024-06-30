@@ -41,7 +41,6 @@ exports.facebookLogin = async (req, res) => {
   console.log('Token recebido:', accessToken);
 
   try {
-    // Verificar e registrar usuário com base no token do Facebook e dados do usuário
     const user = await findOrCreateUserWithFacebook(accessToken, userData);
     res.json({ message: 'Login bem-sucedido', user });
   } catch (err) {
@@ -49,7 +48,6 @@ exports.facebookLogin = async (req, res) => {
   }
 };
 
-// Função auxiliar para lidar com login/registro de usuário via Facebook
 const findOrCreateUserWithFacebook = async (accessToken, userData) => {
   const email = userData.email;
   let user = await findUserByEmail(email);

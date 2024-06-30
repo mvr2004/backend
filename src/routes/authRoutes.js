@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post('/login', login);
 router.post('/login/google', googleLogin);
+router.post('/login/facebook', facebookLogin);
 
 // Rotas para autenticação via Facebook
 router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
