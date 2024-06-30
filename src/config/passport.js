@@ -5,7 +5,7 @@ const { findUserByEmail, registerUser } = require('../services/authService');
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/callback",
+  callbackURL: "http://backend-9hij.onrender/auth/facebook/callback",
   profileFields: ['id', 'emails', 'name', 'picture.type(large)']
 }, async (accessToken, refreshToken, profile, done) => {
   try {
