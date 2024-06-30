@@ -1,4 +1,6 @@
 const express = require('express');
+const passport = require('./config/passport');
+const session = require('express-session');
 const cors = require('cors');
 const multer = require('multer');
 const sharp = require('sharp'); // Importar sharp para manipulação de imagens
@@ -33,6 +35,12 @@ const upload = multer({
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/generic', genericRoutes);
+
+
+app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.get('/', (req, res) => {
   res.send('API está a funcionar. Acesse /api/data para obter dados.');
@@ -72,5 +80,9 @@ sequelize.sync()
     });
   })
   .catch(err => console.log(err));
+  
+  
+  
+  
 
 module.exports = app;

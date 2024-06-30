@@ -14,7 +14,7 @@ exports.sendConfirmationEmail = async (email, code) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Email Confirmation softshare',
-    text: `Your confirmation code is: ${code}`
+    text: `O codigo de confirmação é: ${code}`
   };
 
   try {
