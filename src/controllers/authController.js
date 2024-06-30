@@ -55,7 +55,9 @@ const findOrCreateUserWithFacebook = async (accessToken, userData) => {
   if (!user) {
     const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
     const photoUrl = userData.picture.data.url;
-    const newUser = await registerUser(`${userData.first_name} ${userData.last_name}`, email, password, photoUrl);
+    const firstName = userData.first_name || 'First'; // Default value if undefined
+    const lastName = userData.last_name || 'Last'; // Default value if undefined
+    const newUser = await registerUser(`${firstName} ${lastName}`, email, password, photoUrl);
     if (!newUser) {
       throw new Error('Falha ao registrar usuário');
     }
