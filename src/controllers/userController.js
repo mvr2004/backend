@@ -1,16 +1,14 @@
-// src/controllers/userController.js
-const { queryTable, registerUser, confirmEmail, updateUserPassword  } = require('../services/userService');
+const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro } = require('../services/userService');
 
 exports.register = async (req, res) => {
   const { name, email, password, photoUrl } = req.body;
   try {
-    const userExists = await checkUserExists(email);
-    if (userExists) {
+    const result = await registerUser(name, email, password, photoUrl);
+    if (result.success === false && result.reason === 'user_exists') {
       return res.status(400).json({ message: 'Utilizador já existe' });
     }
 
-    const success = await registerUser(name, email, password, photoUrl);
-    if (success) {
+    if (result) {
       res.status(201).json({ message: 'Utilizador registrado com sucesso. Verifique seu e-mail para confirmar.' });
     } else {
       res.status(400).json({ message: 'Falha ao registrar utilizador' });
@@ -30,7 +28,6 @@ exports.getData = async (req, res) => {
     res.status(500).json({ message: `Erro ao obter dados da tabela: ${err.message}` });
   }
 };
-
 
 exports.confirmEmail = async (req, res) => {
   const { email, code } = req.body;
@@ -61,7 +58,6 @@ exports.updatePassword = async (req, res) => {
     res.status(500).json({ message: `Erro ao atualizar a senha: ${err.message}` });
   }
 };
-
 
 exports.updateCentro = async (req, res) => {
   const { userId, centroId } = req.body;
