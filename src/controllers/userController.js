@@ -61,6 +61,7 @@ exports.updatePassword = async (req, res) => {
 
 exports.updateCentro = async (req, res) => {
   const { userId, centroId } = req.body;
+  console.log(`Recebido userId: ${userId}, centroId: ${centroId}`);
   try {
     const success = await updateUserCentro(userId, centroId);
     if (success) {

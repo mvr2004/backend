@@ -61,8 +61,12 @@ exports.updateUserPassword = async (userId, newPassword) => {
 };
 
 exports.updateUserCentro = async (userId, centroId) => {
+  console.log(`Tentando atualizar centro para o usuário com ID ${userId}`);
   const user = await User.findByPk(userId);
-  if (!user) throw new Error('Usuário não encontrado');
+  if (!user) {
+    console.error(`Usuário com ID ${userId} não encontrado`);
+    throw new Error('Usuário não encontrado');
+  }
 
   user.centroId = centroId;
   await user.save();
