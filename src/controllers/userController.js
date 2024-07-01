@@ -2,9 +2,9 @@
 const { queryTable, registerUser, confirmEmail, updateUserPassword  } = require('../services/userService');
 
 exports.register = async (req, res) => {
-  const { name, email, password, photoUrl, centroId } = req.body;
+  const { name, email, password, photoUrl } = req.body;
   try {
-    const success = await registerUser(name, email, password, photoUrl, centroId);
+    const success = await registerUser(name, email, password, photoUrl);
     if (success) {
       res.status(201).json({ message: 'Utilizador registrado com sucesso. Verifique seu e-mail para confirmar.' });
     } else {
@@ -54,5 +54,21 @@ exports.updatePassword = async (req, res) => {
   } catch (err) {
     console.error('Erro ao atualizar a senha:', err);
     res.status(500).json({ message: `Erro ao atualizar a senha: ${err.message}` });
+  }
+};
+
+
+exports.updateCentro = async (req, res) => {
+  const { email, centroId } = req.body;
+  try {
+    const success = await updateUserCentro(email, centroId);
+    if (success) {
+      res.status(200).json({ message: 'Centro atualizado com sucesso' });
+    } else {
+      res.status(400).json({ message: 'Falha ao atualizar centro' });
+    }
+  } catch (err) {
+    console.error('Erro ao atualizar centro:', err);
+    res.status(500).json({ message: `Erro ao atualizar centro: ${err.message}` });
   }
 };

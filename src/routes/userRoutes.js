@@ -7,5 +7,6 @@ router.post('/register', userController.register); // Usando userController.regi
 router.get('/data', userController.getData); // Usando userController.getData
 router.post('/confirmEmail', userController.confirmEmail); // Usando userController.confirmEmail
 router.post('/updatePassword', userController.updatePassword);  
+router.post('/updateCentro', userController.updateCentro);
 
 module.exports = router;

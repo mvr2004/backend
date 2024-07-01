@@ -46,7 +46,6 @@ const User = sequelize.define('User', {
   },
   centroId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
     references: {
       model: Centro,
       key: 'id'
