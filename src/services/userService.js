@@ -28,7 +28,7 @@ exports.registerUser = async (name, email, password, photoUrl) => {
   try {
     const user = await User.create({ name, email, password: hashedPassword, photoUrl, confirmationCode });
     await sendConfirmationEmail(email, confirmationCode);
-    return !!user;
+    return { success: true, user };
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
       return { success: false, reason: 'user_exists' };

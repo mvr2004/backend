@@ -15,6 +15,7 @@ exports.verifyLogin = async (email, password) => {
   return user;
 };
 
+
 exports.verifyGoogleToken = async (token) => {
   const ticket = await client.verifyIdToken({
     idToken: token,

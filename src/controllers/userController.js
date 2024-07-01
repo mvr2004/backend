@@ -8,7 +8,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Utilizador já existe' });
     }
 
-    if (result) {
+    if (result.success) {
       res.status(201).json({ message: 'Utilizador registrado com sucesso. Verifique seu e-mail para confirmar.' });
     } else {
       res.status(400).json({ message: 'Falha ao registrar utilizador' });
@@ -18,6 +18,7 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: `Erro ao registrar utilizador: ${err.message}` });
   }
 };
+
 
 exports.getData = async (req, res) => {
   try {
