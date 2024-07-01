@@ -1,6 +1,6 @@
-// src/models/User.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
+const Centro = require('./Centro');
 
 const User = sequelize.define('User', {
   id: {
@@ -35,10 +35,27 @@ const User = sequelize.define('User', {
   confirmationCode: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  firstLogin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  notas: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  centroId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Centro,
+      key: 'id'
+    }
   }
 }, {
-  // Disable timestamps
   timestamps: false
 });
+
+User.belongsTo(Centro, { foreignKey: 'centroId' });
 
 module.exports = User;

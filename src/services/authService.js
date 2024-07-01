@@ -7,7 +7,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.verifyLogin = async (email, password) => {
   const user = await User.findOne({ where: { email } });
-  if (!user) throw new Error('Usuário não encontrado');
+  if (!user) throw new Error('utilizador não encontrado');
   
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) throw new Error('Senha inválida');

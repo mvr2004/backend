@@ -6,11 +6,16 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await verifyLogin(email, password);
-    res.json({ message: 'Login bem-sucedido', user });
+    if (user.firstLogin) {
+      res.json({ message: 'Login bem-sucedido, por favor, atualize sua senha.', user, firstLogin: true });
+    } else {
+      res.json({ message: 'Login bem-sucedido', user, firstLogin: false });
+    }
   } catch (err) {
     res.status(400).json({ message: `Erro ao fazer login: ${err.message}` });
   }
 };
+
 
 exports.googleLogin = async (req, res) => {
   const { token, photoUrl } = req.body; 
@@ -58,7 +63,7 @@ const findOrCreateUserWithFacebook = async (accessToken, userData) => {
     const firstName = userData.name || ''; 
     const newUser = await registerUser(firstName, email, password, photoUrl);
     if (!newUser) {
-      throw new Error('Falha ao registrar usuário');
+      throw new Error('Falha ao registrar utilizador');
     }
     user = await findUserByEmail(email);
   }
