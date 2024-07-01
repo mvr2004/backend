@@ -50,8 +50,8 @@ exports.updateUserPassword = async (userId, newPassword) => {
   return true;
 };
 
-exports.updateUserCentro = async (email, centroId) => {
-  const user = await User.findOne({ where: { email } });
+exports.updateUserCentro = async (userId, centroId) => {
+  const user = await User.findByPk(userId);
   if (!user) throw new Error('Usuário não encontrado');
 
   user.centroId = centroId;

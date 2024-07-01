@@ -59,9 +59,9 @@ exports.updatePassword = async (req, res) => {
 
 
 exports.updateCentro = async (req, res) => {
-  const { email, centroId } = req.body;
+  const { userId, centroId } = req.body;
   try {
-    const success = await updateUserCentro(email, centroId);
+    const success = await updateUserCentro(userId, centroId);
     if (success) {
       res.status(200).json({ message: 'Centro atualizado com sucesso' });
     } else {
