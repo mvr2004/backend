@@ -4,6 +4,11 @@ const { queryTable, registerUser, confirmEmail, updateUserPassword  } = require(
 exports.register = async (req, res) => {
   const { name, email, password, photoUrl } = req.body;
   try {
+    const userExists = await checkUserExists(email);
+    if (userExists) {
+      return res.status(400).json({ message: 'Utilizador já existe' });
+    }
+
     const success = await registerUser(name, email, password, photoUrl);
     if (success) {
       res.status(201).json({ message: 'Utilizador registrado com sucesso. Verifique seu e-mail para confirmar.' });

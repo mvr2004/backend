@@ -17,6 +17,12 @@ const generateConfirmationCode = () => {
   return Math.floor(10000 + Math.random() * 90000); // Gera um número aleatório entre 10000 e 99999
 };
 
+
+exports.checkUserExists = async (email) => {
+  const user = await User.findOne({ where: { email } });
+  return !!user;
+};
+
 exports.registerUser = async (name, email, password, photoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const confirmationCode = generateConfirmationCode();
