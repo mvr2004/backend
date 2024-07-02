@@ -25,6 +25,12 @@ exports.registerUser = async (name, email, password, photoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const confirmationCode = generateConfirmationCode();
 
+  // Check if user already exists with the same email
+  const existingUser = await User.findOne({ where: { email } });
+  if (existingUser) {
+    throw new Error('User already exists');
+  }
+
   try {
     const user = await User.create({ name, email, password: hashedPassword, photoUrl, confirmationCode });
     await sendConfirmationEmail(email, confirmationCode);
@@ -36,6 +42,7 @@ exports.registerUser = async (name, email, password, photoUrl) => {
     throw err;
   }
 };
+
 
 exports.confirmEmail = async (email, code) => {
   const user = await User.findOne({ where: { email, confirmationCode: code } });

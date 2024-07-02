@@ -58,7 +58,7 @@ exports.facebookLogin = async (req, res) => {
   }
 };
 
-};
+
 
 const findOrCreateUserWithFacebook = async (accessToken, userData) => {
   const email = userData.email;
