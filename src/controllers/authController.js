@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
+  console.log(`Tentativa de login: ${email}`); // Log para verificar a tentativa de login
   try {
     const user = await verifyLogin(email, password);
     console.log(`Usuário ${user.email} autenticado com sucesso.`);
