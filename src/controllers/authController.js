@@ -24,38 +24,40 @@ exports.login = async (req, res) => {
 
 exports.googleLogin = async (req, res) => {
   const { token, photoUrl } = req.body; 
-  console.log('Token recebido:', token);
 
   try {
     const googleUser = await verifyGoogleToken(token);
     let user = await findUserByEmail(googleUser.email);
 
     if (!user) {
-      const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
-      const newUser = await registerUser(googleUser.name, googleUser.email, password, photoUrl); // Passa a URL da foto
+      // Generate a random password for Google registered users
+      const password = Math.random().toString(36).slice(-8); 
+      const newUser = await registerUser(googleUser.name, googleUser.email, password, photoUrl); 
       if (!newUser) {
-        throw new Error('Falha ao registrar usuário');
+        throw new Error('Failed to register user');
       }
       user = await findUserByEmail(googleUser.email);
     }
 
-    res.json({ message: 'Login bem-sucedido', user });
+    res.json({ message: 'Login successful', user });
   } catch (err) {
-    res.status(400).json({ message: `Erro ao fazer login com Google: ${err.message}` });
+    res.status(400).json({ message: `Error logging in with Google: ${err.message}` });
   }
 };
 
 
+
 exports.facebookLogin = async (req, res) => {
   const { accessToken, userData } = req.body;
-  console.log('Token recebido:', accessToken);
 
   try {
     const user = await findOrCreateUserWithFacebook(accessToken, userData);
-    res.json({ message: 'Login bem-sucedido', user });
+    res.json({ message: 'Login successful', user });
   } catch (err) {
-    res.status(400).json({ message: `Erro ao fazer login com Facebook: ${err.message}` });
+    res.status(400).json({ message: `Error logging in with Facebook: ${err.message}` });
   }
+};
+
 };
 
 const findOrCreateUserWithFacebook = async (accessToken, userData) => {
