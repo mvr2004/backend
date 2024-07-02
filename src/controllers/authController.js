@@ -10,7 +10,6 @@ exports.login = async (req, res) => {
     console.log(`Usuário ${user.email} autenticado com sucesso.`);
     if (user.firstLogin) {
       console.log(`Usuário ${user.email} precisa atualizar a senha.`);
-      res.json({ message: 'Login bem-sucedido, por favor, atualize sua senha.', user, firstLogin: true });
     } else {
       console.log(`Login bem-sucedido para o usuário ${user.email}.`);
       res.json({ message: 'Login bem-sucedido', user, firstLogin: false });
