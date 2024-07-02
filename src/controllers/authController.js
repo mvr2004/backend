@@ -1,15 +1,15 @@
 // src/controllers/authController.js
-const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser, updateUserPassword  } = require('../services/authService');
+const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser } = require('../services/authService');
 const { v4: uuidv4 } = require('uuid');
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(`Tentativa de login: ${email}`); // Log para verificar a tentativa de login
   try {
     const user = await verifyLogin(email, password);
     console.log(`Usuário ${user.email} autenticado com sucesso.`);
     if (user.firstLogin) {
       console.log(`Usuário ${user.email} precisa atualizar a senha.`);
+      res.json({ message: 'Login bem-sucedido, por favor, atualize sua senha.', user, firstLogin: true });
     } else {
       console.log(`Login bem-sucedido para o usuário ${user.email}.`);
       res.json({ message: 'Login bem-sucedido', user, firstLogin: false });
@@ -24,41 +24,39 @@ exports.login = async (req, res) => {
 
 exports.googleLogin = async (req, res) => {
   const { token, photoUrl } = req.body; 
+  console.log('Token recebido:', token);
 
   try {
     const googleUser = await verifyGoogleToken(token);
     let user = await findUserByEmail(googleUser.email);
 
     if (!user) {
-      // Generate a random password for Google registered users
-      const password = Math.random().toString(36).slice(-8); 
-      const newUser = await registerUser(googleUser.name, googleUser.email, password, photoUrl); 
+      const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
+      const newUser = await registerUser(googleUser.name, googleUser.email, password, photoUrl); // Passa a URL da foto
       if (!newUser) {
-        throw new Error('Failed to register user');
+        throw new Error('Falha ao registrar usuário');
       }
       user = await findUserByEmail(googleUser.email);
     }
 
-    res.json({ message: 'Login successful', user });
+    res.json({ message: 'Login bem-sucedido', user });
   } catch (err) {
-    res.status(400).json({ message: `Error logging in with Google: ${err.message}` });
+    res.status(400).json({ message: `Erro ao fazer login com Google: ${err.message}` });
   }
 };
-
 
 
 exports.facebookLogin = async (req, res) => {
   const { accessToken, userData } = req.body;
+  console.log('Token recebido:', accessToken);
 
   try {
     const user = await findOrCreateUserWithFacebook(accessToken, userData);
-    res.json({ message: 'Login successful', user });
+    res.json({ message: 'Login bem-sucedido', user });
   } catch (err) {
-    res.status(400).json({ message: `Error logging in with Facebook: ${err.message}` });
+    res.status(400).json({ message: `Erro ao fazer login com Facebook: ${err.message}` });
   }
 };
-
-
 
 const findOrCreateUserWithFacebook = async (accessToken, userData) => {
   const email = userData.email;
@@ -76,20 +74,5 @@ const findOrCreateUserWithFacebook = async (accessToken, userData) => {
   }
 
   return user;
-};
-
-exports.updatePassword = async (req, res) => {
-  const { userId, newPassword } = req.body;
-  try {
-    const success = await updateUserPassword(userId, newPassword);
-    if (success) {
-      res.status(200).json({ message: 'Senha atualizada com sucesso' });
-    } else {
-      res.status(400).json({ message: 'Falha ao atualizar a senha' });
-    }
-  } catch (err) {
-    console.error('Erro ao atualizar a senha:', err);
-    res.status(500).json({ message: `Erro ao atualizar a senha: ${err.message}` });
-  }
 };
 
