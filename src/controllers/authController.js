@@ -1,5 +1,5 @@
 // src/controllers/authController.js
-const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser } = require('../services/authService');
+const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser, updateUserPassword  } = require('../services/authService');
 const { v4: uuidv4 } = require('uuid');
 
 exports.login = async (req, res) => {
@@ -76,5 +76,20 @@ const findOrCreateUserWithFacebook = async (accessToken, userData) => {
   }
 
   return user;
+};
+
+exports.updatePassword = async (req, res) => {
+  const { userId, newPassword } = req.body;
+  try {
+    const success = await updateUserPassword(userId, newPassword);
+    if (success) {
+      res.status(200).json({ message: 'Senha atualizada com sucesso' });
+    } else {
+      res.status(400).json({ message: 'Falha ao atualizar a senha' });
+    }
+  } catch (err) {
+    console.error('Erro ao atualizar a senha:', err);
+    res.status(500).json({ message: `Erro ao atualizar a senha: ${err.message}` });
+  }
 };
 

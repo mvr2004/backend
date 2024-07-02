@@ -59,7 +59,7 @@ exports.updateUserPassword = async (userId, newPassword) => {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   const user = await User.findByPk(userId);
   if (!user) throw new Error('Usuário não encontrado');
-  
+
   user.password = hashedPassword;
   user.firstLogin = false;
   await user.save();
