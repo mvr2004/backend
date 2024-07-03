@@ -7,13 +7,18 @@ exports.login = async (req, res) => {
   try {
     const user = await verifyLogin(email, password);
     console.log(`Utilizador ${user.email} autenticado com sucesso.`);
-    if (user.firstLogin) {
-      console.log(`Usuário ${user.email} precisa atualizar a senha.`);
-      res.json({ message: 'Login bem-sucedido', user, firstLogin: true });
-    } else {
-      console.log(`Login bem-sucedido para o usuário ${user.email}.`);
-      res.json({ message: 'Login bem-sucedido', user, firstLogin: false });
-    }
+    
+    res.status(200).json({
+      message: 'Login bem-sucedido',
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        photoUrl: user.photoUrl,
+        firstLogin: user.firstLogin
+      },
+      firstLogin: user.firstLogin
+    });
   } catch (err) {
     console.error(`Erro ao fazer login: ${err.message}`);
     res.status(400).json({ message: `Erro ao fazer login: ${err.message}` });

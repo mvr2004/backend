@@ -1,4 +1,4 @@
-const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro } = require('../services/userService');
+const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');
 const Centro = require('../models/Centro');
 
@@ -47,8 +47,13 @@ exports.confirmEmail = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
-  const { userId, newPassword } = req.body;
+  const { userId, newPassword, currentPassword } = req.body;
+
   try {
+    // Verificar se a senha atual está correta
+    await verifyPassword(userId, currentPassword);
+
+    // Atualizar a senha
     const success = await updateUserPassword(userId, newPassword);
     if (success) {
       res.status(200).json({ message: 'Senha atualizada com sucesso' });

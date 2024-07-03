@@ -73,3 +73,18 @@ exports.updateUserCentro = async (userId, centroId) => {
 
   return true;
 };
+
+
+exports.verifyPassword = async (userId, password) => {
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw new Error('Utilizador não encontrado');
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error('Palavra-passe atual incorreta');
+  }
+
+  return true;
+};
