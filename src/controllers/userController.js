@@ -46,8 +46,6 @@ exports.confirmEmail = async (req, res) => {
   }
 };
 
-const { verifyPassword, updateUserPassword } = require('../services/userService');
-
 exports.updatePassword = async (req, res) => {
   const { userId, currentPassword, newPassword } = req.body;
 
