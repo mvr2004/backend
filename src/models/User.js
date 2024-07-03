@@ -1,6 +1,9 @@
+// models/User.js
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 const Centro = require('./Centro');
+const UserAreaInteresse = require('./UserAreaInteresse'); // Importe a tabela de associação
 
 const User = sequelize.define('User', {
   id: {
@@ -56,5 +59,6 @@ const User = sequelize.define('User', {
 });
 
 User.belongsTo(Centro, { foreignKey: 'centroId' });
+User.belongsToMany(AreaInteresse, { through: UserAreaInteresse, foreignKey: 'userId' });
 
 module.exports = User;

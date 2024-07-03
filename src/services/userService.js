@@ -73,3 +73,47 @@ exports.updateUserCentro = async (userId, centroId) => {
 
   return true;
 };
+
+exports.getUserData = async (userId) => {
+  try {
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: Centro // Inclui dados do centro associado ao usuário
+        },
+        {
+          model: AreaInteresse,
+          through: { attributes: [] } // Para retornar apenas os dados da tabela de associação UserAreaInteresse
+        }
+      ]
+    });
+
+    return user; // Retorna o usuário com suas áreas de interesse
+  } catch (err) {
+    console.error(`Erro ao buscar dados do usuário: ${err.message}`);
+    throw err;
+  }
+};
+
+// Função para obter as áreas de interesse de um usuário
+exports.getUserAreasInteresse = async (userId) => {
+  try {
+    const user = await User.findByPk(userId, {
+      include: [
+        {
+          model: AreaInteresse,
+          through: { attributes: [] } // Para retornar apenas os dados da tabela de associação UserAreaInteresse
+        }
+      ]
+    });
+
+    if (!user) {
+      return { success: false, message: 'Usuário não encontrado' };
+    }
+
+    return { success: true, areasInteresse: user.AreasInteresses }; // Retorna as áreas de interesse do usuário
+  } catch (err) {
+    console.error(`Erro ao buscar áreas de interesse do usuário: ${err.message}`);
+    throw err;
+  }
+};
