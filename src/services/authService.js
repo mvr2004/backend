@@ -28,7 +28,7 @@ exports.verifyGoogleToken = async (token) => {
   return {
     userid: payload.sub,
     email: payload.email,
-    name: payload.name
+    name: payload.name,
   };
 };
 
@@ -40,4 +40,10 @@ exports.registerUser = async (name, email, password, photoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await User.create({ name, email, password: hashedPassword, photoUrl });
   return !!user;
+};
+
+exports.verifyUserIsActive = async (email) => {
+  const user = await User.findOne({ where: { email } });
+  if (user && !user.isActive) throw new Error('Utilizador inativo');
+  return user;
 };
