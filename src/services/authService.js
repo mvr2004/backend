@@ -9,11 +9,14 @@ exports.verifyLogin = async (email, password) => {
   const user = await User.findOne({ where: { email } });
   if (!user) throw new Error('Utilizador não encontrado');
   
+  if (!user.isActive) throw new Error('Utilizador inativo');
+
   const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) throw new Error('Senha inválida');
+  if (!isPasswordValid) throw new Error('Palavra passe inválida');
   
   return user;
 };
+
 
 
 exports.verifyGoogleToken = async (token) => {
