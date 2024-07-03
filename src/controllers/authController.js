@@ -1,5 +1,5 @@
 // src/controllers/authController.js
-const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser } = require('../services/authService');
+const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser, verifyUserIsActive } = require('../services/authService');
 const { v4: uuidv4 } = require('uuid');
 
 exports.login = async (req, res) => {
