@@ -77,28 +77,13 @@ exports.updateCentro = async (req, res) => {
   }
 };
 
-// Função para obter as áreas de interesse do usuário
-exports.getUserAreasInteresse = async (req, res) => {
-  const userId = req.params.userId;
-
-  try {
-    const result = await userService.getUserAreasInteresse(userId);
-    if (!result.success) {
-      return res.status(404).json({ message: result.message });
-    }
-
-    res.json(result.areasInteresse);
-  } catch (err) {
-    console.error(`Erro ao buscar áreas de interesse do usuário: ${err.message}`);
-    res.status(500).json({ message: `Erro ao buscar áreas de interesse do usuário: ${err.message}` });
-  }
-};
-
 exports.getUserData = async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const user = await userService.getUserData(userId);
+    const user = await User.findByPk(userId, {
+      include: Centro // Se quiser incluir dados do centro associado ao usuário
+    });
 
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
