@@ -1,4 +1,6 @@
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro } = require('../services/userService');
+const User = require('../models/User');
+const Centro = require('../models/Centro');
 
 exports.register = async (req, res) => {
   const { name, email, password, photoUrl } = req.body;
@@ -72,5 +74,24 @@ exports.updateCentro = async (req, res) => {
   } catch (err) {
     console.error('Erro ao atualizar centro:', err);
     res.status(500).json({ message: `Erro ao atualizar centro: ${err.message}` });
+  }
+};
+
+exports.getUserData = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findByPk(userId, {
+      include: Centro // Se quiser incluir dados do centro associado ao usuário
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error(`Erro ao buscar dados do usuário: ${err.message}`);
+    res.status(500).json({ message: `Erro ao buscar dados do usuário: ${err.message}` });
   }
 };

@@ -9,4 +9,8 @@ router.post('/confirmEmail', userController.confirmEmail); // Usando userControl
 router.post('/updatePassword', userController.updatePassword);  
 router.post('/updateCentro', userController.updateCentro);
 
+
+// Rota para obter os dados do usuário pelo ID
+router.get('/getUserData/:userId', userController.getUserData);
+
 module.exports = router;
