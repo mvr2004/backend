@@ -6,7 +6,7 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await verifyLogin(email, password);
-    console.log(`Usuário ${user.email} autenticado com sucesso.`);
+    console.log(`Utilizador ${user.email} autenticado com sucesso.`);
     if (user.firstLogin) {
       console.log(`Usuário ${user.email} precisa atualizar a senha.`);
       res.json({ message: 'Login bem-sucedido', user, firstLogin: true });

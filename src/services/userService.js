@@ -65,7 +65,7 @@ exports.updateUserCentro = async (userId, centroId) => {
   const user = await User.findByPk(userId);
   if (!user) {
     console.error(`Usuário com ID ${userId} não encontrado`);
-    throw new Error('Usuário não encontrado');
+    throw new Error('Utilizador não encontrado');
   }
 
   user.centroId = centroId;
