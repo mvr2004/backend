@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
@@ -147,17 +148,20 @@ exports.resetPassword = async (req, res) => {
   const { email, code } = req.body;
 
   try {
-    console.log(`Tentando redefinir senha para o email: ${email}`);
+    console.log(`Tentando redefinir senha para o email: ${email} com código: ${code}`);
 
+    // Encontrar o usuário com o email e código de confirmação fornecidos
     const user = await User.findOne({ where: { email, confirmationCode: code } });
     if (!user) {
       console.log(`Código de confirmação inválido para o email: ${email}`);
       return res.status(400).json({ message: 'Código de confirmação inválido' });
     }
 
+    // Gerar nova senha aleatória
     const newPassword = Math.random().toString(36).slice(-8); // Gera uma senha aleatória
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
+    // Atualizar senha do usuário
     user.password = hashedPassword;
     user.firstLogin = true; // Marca o usuário como primeiro login
     user.confirmationCode = null; // Limpa o código de confirmação
@@ -165,11 +169,13 @@ exports.resetPassword = async (req, res) => {
 
     console.log(`Senha redefinida com sucesso para o email: ${email}`);
 
+    // Enviar nova senha por email
     await sendNewPasswordEmail(email, newPassword);
+
+    // Responder ao cliente com sucesso
     res.status(200).json({ message: 'Senha redefinida e enviada por email' });
   } catch (err) {
     console.error('Erro ao redefinir senha:', err);
     res.status(500).json({ message: 'Erro ao redefinir senha' });
   }
 };
-
