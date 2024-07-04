@@ -147,8 +147,11 @@ exports.resetPassword = async (req, res) => {
   const { email, code } = req.body;
 
   try {
+    console.log(`Tentando redefinir senha para o email: ${email}`);
+
     const user = await User.findOne({ where: { email, confirmationCode: code } });
     if (!user) {
+      console.log(`Código de confirmação inválido para o email: ${email}`);
       return res.status(400).json({ message: 'Código de confirmação inválido' });
     }
 
@@ -159,6 +162,8 @@ exports.resetPassword = async (req, res) => {
     user.firstLogin = true; // Marca o usuário como primeiro login
     user.confirmationCode = null; // Limpa o código de confirmação
     await user.save();
+
+    console.log(`Senha redefinida com sucesso para o email: ${email}`);
 
     await sendNewPasswordEmail(email, newPassword);
     res.status(200).json({ message: 'Senha redefinida e enviada por email' });
