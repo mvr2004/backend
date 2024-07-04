@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const path = require('path');
+const sharp = require('sharp');
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
@@ -177,5 +179,56 @@ exports.resetPassword = async (req, res) => {
   } catch (err) {
     console.error('Erro ao redefinir senha:', err);
     res.status(500).json({ message: 'Erro ao redefinir senha' });
+  }
+};
+
+
+exports.updateUserProfile = async (req, res) => {
+  try {
+    console.log('Request received to update user profile');
+
+    // Encontrar o usuário pelo ID
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
+      console.log(`User with ID ${req.params.id} not found`);
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Atualizar o nome se fornecido no corpo da requisição
+    if (req.body.name !== undefined && req.body.name !== null) {
+      console.log(`Updating user name to ${req.body.name}`);
+      user.name = req.body.name;
+    }
+
+    // Processar a imagem se enviada na requisição
+    if (req.file) {
+      console.log('Processing profile image');
+
+      // Redimensionar a imagem usando sharp
+      const resizedImage = await sharp(req.file.buffer)
+        .resize({ width: 300, height: 300 })
+        .toBuffer();
+
+      // Gerar nome de arquivo único baseado no timestamp
+      const filename = Date.now() + '-' + req.file.originalname;
+      const filepath = path.join(__dirname, '../uploads/', filename);
+
+      // Salvar a imagem redimensionada
+      await sharp(resizedImage).toFile(filepath);
+      console.log(`Saved resized image to ${filepath}`);
+
+      // Atualizar o URL da foto do usuário
+      user.photoUrl = filepath;
+    }
+
+    // Salvar as alterações no banco de dados
+    await user.save();
+    console.log('User profile updated successfully');
+
+    // Responder com sucesso e os dados atualizados do usuário
+    res.json({ message: 'Profile updated successfully', user });
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    res.status(500).json({ error: 'An error occurred while updating the profile' });
   }
 };
