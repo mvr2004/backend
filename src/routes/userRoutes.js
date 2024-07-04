@@ -11,7 +11,7 @@ router.post('/updatePassword', userController.updatePassword);
 router.post('/updateCentro', userController.updateCentro);
 router.post('/forgotPassword', userController.forgotPassword); 
 router.post('/resetPassword', userController.resetPassword); 
-router.put('/updateProfile/:id', upload.single('photo'), updateUserProfile);
+router.put('/updateProfile/:id', upload.single('photo'), userController.updateUserProfile);
 
 
 
