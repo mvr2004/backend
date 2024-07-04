@@ -104,27 +104,41 @@ exports.getUserData = async (req, res) => {
   }
 };
 
+const User = require('../models/User');
+const { sendResetEmail } = require('../services/emailService');
+const { generateConfirmationCode } = require('../utils/helpers');
+
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
+    console.log(`Procurando usuário com email: ${email}`);
     const user = await User.findOne({ where: { email } });
     if (!user) {
+      console.log(`Usuário não encontrado para email: ${email}`);
       return res.status(404).json({ message: 'Email não encontrado' });
     }
 
+    console.log(`Usuário encontrado: ${user.email}`);
+
     const resetCode = generateConfirmationCode();
+    console.log(`Código de confirmação gerado: ${resetCode}`);
+
     user.confirmationCode = resetCode;
     await user.save();
 
+    console.log(`Código de confirmação salvo para usuário: ${user.email}`);
+
     await sendResetEmail(email, resetCode);
+    console.log(`Email enviado com código de confirmação para: ${email}`);
+
     res.status(200).json({ message: 'Código de confirmação enviado para o email' });
-	
   } catch (err) {
     console.error('Erro ao processar solicitação de esqueci a senha:', err);
     res.status(500).json({ message: 'Erro ao processar solicitação de esqueci a senha' });
   }
 };
+
 
 exports.resetPassword = async (req, res) => {
   const { email, code } = req.body;
