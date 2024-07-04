@@ -1,4 +1,4 @@
-const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword,generateConfirmationCode } = require('../services/userService');
+const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
 const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
@@ -103,6 +103,13 @@ exports.getUserData = async (req, res) => {
     res.status(500).json({ message: `Erro ao buscar dados do usuário: ${err.message}` });
   }
 };
+
+
+// Função para gerar um código de 5 dígitos
+const generateConfirmationCode = () => {
+  return Math.floor(10000 + Math.random() * 90000); // Gera um número aleatório entre 10000 e 99999
+};
+
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
