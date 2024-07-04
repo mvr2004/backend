@@ -1,8 +1,10 @@
 // src/routes/userRoutes.js
 const express = require('express');
-const multer = require('multer');
 const userController = require('../controllers/userController'); // Importando o userController
 const router = express.Router();
+const upload = require('../config/uploadConfig');
+
+;
 
 router.post('/register', userController.register); // Usando userController.register
 router.get('/data', userController.getData); // Usando userController.getData
