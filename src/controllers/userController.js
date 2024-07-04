@@ -104,10 +104,6 @@ exports.getUserData = async (req, res) => {
   }
 };
 
-const User = require('../models/User');
-const { sendResetEmail } = require('../services/emailService');
-const { generateConfirmationCode } = require('../utils/helpers');
-
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 
