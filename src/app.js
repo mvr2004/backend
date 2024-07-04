@@ -24,13 +24,14 @@ const storage = multer.memoryStorage(); // Usar memoryStorage para trabalhar com
 const upload = multer({ 
   storage: storage,
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
+    if (file.mimetype.startsWith('image/')) {  // This should be 'image/' instead of 'uploads/'
       cb(null, true);
     } else {
       cb(new Error('Apenas arquivos de imagem são permitidos.'));
     }
   }
 });
+
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
@@ -85,4 +86,4 @@ sequelize.sync()
   
   
 
-module.exports = app;
+module.exports = { app, upload };;

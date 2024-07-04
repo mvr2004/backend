@@ -13,6 +13,7 @@ router.post('/resetPassword', userController.resetPassword);
 router.put('/updateProfile/:id', upload.single('photo'), updateUserProfile);
 
 
+
 // Rota para obter os dados do usuário pelo ID
 router.get('/getUserData/:userId', userController.getUserData);
 
