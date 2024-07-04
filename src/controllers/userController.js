@@ -1,7 +1,7 @@
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');
 const Centro = require('../models/Centro');
-const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('./emailService');
+const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
 
 exports.register = async (req, res) => {
   const { name, email, password, photoUrl } = req.body;
