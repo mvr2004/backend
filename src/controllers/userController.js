@@ -1,5 +1,5 @@
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword,generateConfirmationCode } = require('../services/userService');
-const User = require('../models/User');
+const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
 const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
 
