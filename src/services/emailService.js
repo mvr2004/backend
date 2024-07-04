@@ -24,3 +24,37 @@ exports.sendConfirmationEmail = async (email, code) => {
     console.error('Error sending email:', error);
   }
 };
+
+
+exports.sendResetEmail = async (email, code) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Recuperação de Senha',
+    text: `Seu código de confirmação é: ${code}`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email de recuperação enviado: ' + email);
+  } catch (error) {
+    console.error('Erro ao enviar email de recuperação:', error);
+  }
+};
+
+
+exports.sendNewPasswordEmail = async (email, newPassword) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Nova Senha',
+    text: `Sua nova senha é: ${newPassword}`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email com nova senha enviado: ' + email);
+  } catch (error) {
+    console.error('Erro ao enviar email com nova senha:', error);
+  }
+};

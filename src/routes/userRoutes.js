@@ -8,6 +8,8 @@ router.get('/data', userController.getData); // Usando userController.getData
 router.post('/confirmEmail', userController.confirmEmail); // Usando userController.confirmEmail
 router.post('/updatePassword', userController.updatePassword);  
 router.post('/updateCentro', userController.updateCentro);
+router.post('/forgotPassword', userController.forgotPassword); 
+router.post('/resetPassword', userController.resetPassword); 
 
 
 // Rota para obter os dados do usuário pelo ID

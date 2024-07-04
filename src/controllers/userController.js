@@ -1,6 +1,7 @@
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');
 const Centro = require('../models/Centro');
+const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('./emailService');
 
 exports.register = async (req, res) => {
   const { name, email, password, photoUrl } = req.body;
@@ -102,3 +103,50 @@ exports.getUserData = async (req, res) => {
     res.status(500).json({ message: `Erro ao buscar dados do usuário: ${err.message}` });
   }
 };
+
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: 'Email não encontrado' });
+    }
+
+    const resetCode = generateConfirmationCode();
+    user.confirmationCode = resetCode;
+    await user.save();
+
+    await sendResetEmail(email, resetCode);
+    res.status(200).json({ message: 'Código de confirmação enviado para o email' });
+  } catch (err) {
+    console.error('Erro ao processar solicitação de esqueci a senha:', err);
+    res.status(500).json({ message: 'Erro ao processar solicitação de esqueci a senha' });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { email, code } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email, confirmationCode: code } });
+    if (!user) {
+      return res.status(400).json({ message: 'Código de confirmação inválido' });
+    }
+
+    const newPassword = Math.random().toString(36).slice(-8); // Gera uma senha aleatória
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    user.firstLogin = true; // Marca o usuário como primeiro login
+    user.confirmationCode = null; // Limpa o código de confirmação
+    await user.save();
+
+    await sendNewPasswordEmail(email, newPassword);
+    res.status(200).json({ message: 'Senha redefinida e enviada por email' });
+  } catch (err) {
+    console.error('Erro ao redefinir senha:', err);
+    res.status(500).json({ message: 'Erro ao redefinir senha' });
+  }
+};
+
