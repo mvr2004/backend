@@ -1,4 +1,4 @@
-const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
+const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword,generateConfirmationCode } = require('../services/userService');
 const User = require('../models/User');
 const Centro = require('../models/Centro');
 const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
@@ -119,6 +119,7 @@ exports.forgotPassword = async (req, res) => {
 
     await sendResetEmail(email, resetCode);
     res.status(200).json({ message: 'Código de confirmação enviado para o email' });
+	
   } catch (err) {
     console.error('Erro ao processar solicitação de esqueci a senha:', err);
     res.status(500).json({ message: 'Erro ao processar solicitação de esqueci a senha' });
