@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const path = require('path');
 const sharp = require('sharp');
+const multer = require('multer');
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
