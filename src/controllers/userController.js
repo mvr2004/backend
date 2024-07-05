@@ -202,6 +202,10 @@ exports.updateUserProfile = async (req, res) => {
       user.name = req.body.name;
     }
 
+    // Adicionar logs para verificar o arquivo recebido
+    console.log('Received file:', req.file);
+    console.log('File buffer length:', req.file.buffer.length); // Verifica o tamanho do buffer
+
     // Processar a imagem se enviada na requisição
     if (req.file) {
       console.log('Processing profile image');
