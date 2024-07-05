@@ -216,7 +216,7 @@ exports.updateUserProfile = async (req, res) => {
         await sharp(resizedImage).toFile(filepath);
         console.log(`Saved resized image to ${filepath}`);
 
-        user.photoUrl = `/uploads/${filename}`;
+        user.photoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
       } catch (imageError) {
         console.error('Error processing image:', imageError);
         return res.status(400).json({ error: 'Invalid image input' });
