@@ -202,20 +202,14 @@ exports.updateUserProfile = async (req, res) => {
       user.name = req.body.name;
     }
 
-    // Adicionar logs para verificar o arquivo recebido
-    console.log('Received file:', req.file);
+    // Verificar se um arquivo foi enviado
     if (req.file) {
-      console.log('File buffer length:', req.file.buffer.length); // Verifica o tamanho do buffer
-    }
+      console.log('Received file:', req.file);
+      console.log('File buffer length:', req.file.buffer.length); // Verificar o tamanho do buffer
 
-    // Processar a imagem se enviada na requisição
-    if (req.file) {
-      console.log('Processing profile image');
       try {
-        // Verificar se o buffer da imagem é válido
-        if (!req.file.buffer || !Buffer.isBuffer(req.file.buffer)) {
-          throw new Error('Invalid image buffer');
-        }
+        // Processar a imagem se enviada na requisição
+        console.log('Processing profile image');
 
         // Redimensionar a imagem usando sharp
         const resizedImage = await sharp(req.file.buffer)
@@ -241,6 +235,8 @@ exports.updateUserProfile = async (req, res) => {
         console.error('Error processing image:', imageError);
         return res.status(400).json({ error: 'Invalid image input' });
       }
+    } else {
+      console.log('No file uploaded');
     }
 
     // Salvar as alterações no banco de dados
