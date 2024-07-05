@@ -11,7 +11,7 @@ const createDirectoryIfNotExists = (directory) => {
 };
 
 // Caminho base para o diretório de uploads
-const uploadDirectory = path.join(__dirname, '../../public/uploads/');
+const uploadDirectory = path.join(__dirname, '../../uploads/');
 
 // Criar o diretório de uploads se não existir
 createDirectoryIfNotExists(uploadDirectory);
