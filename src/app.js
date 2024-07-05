@@ -32,7 +32,8 @@ const upload = multer({
   }
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'src/public/uploads')));
+
 
 
 app.use('/auth', authRoutes);
