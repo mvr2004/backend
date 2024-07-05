@@ -211,10 +211,10 @@ exports.updateUserProfile = async (req, res) => {
         .toBuffer();
 
       // Gerar nome de arquivo único baseado no timestamp
-      const filename = Date.now() + '-' + req.file.originalname;
+      const filename = `${Date.now()}-${req.file.originalname}`;
       const filepath = path.join(__dirname, '../uploads/', filename);
 
-      // Salvar a imagem redimensionada
+      // Salvar a imagem redimensionada no sistema de arquivos
       await sharp(resizedImage).toFile(filepath);
       console.log(`Saved resized image to ${filepath}`);
 
