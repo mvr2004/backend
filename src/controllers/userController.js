@@ -186,51 +186,60 @@ exports.resetPassword = async (req, res) => {
 };
 
 exports.updateUserProfile = async (req, res) => {
-  try {
-    console.log('Request received to update user profile');
+    try {
+        console.log('Request received to update user profile');
 
-    const user = await User.findByPk(req.params.id);
-    if (!user) {
-      console.log(`User with ID ${req.params.id} not found`);
-      return res.status(404).json({ error: 'User not found' });
+        const user = await User.findByPk(req.params.id);
+        if (!user) {
+            console.log(`User with ID ${req.params.id} not found`);
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (req.body.name !== undefined && req.body.name !== null) {
+            console.log(`Updating user name to ${req.body.name}`);
+            user.name = req.body.name;
+        }
+
+        if (req.file) {
+            console.log('Received file:', req.file);
+            console.log('File path:', req.file.path);
+
+            try {
+                console.log('Processing profile image');
+
+                const resizedImage = await sharp(req.file.path)
+                    .resize({ width: 300, height: 300 })
+                    .toBuffer();
+
+                const filename = `${Date.now()}-${req.file.originalname}`;
+                const filepath = path.join(__dirname, '../public/uploads/', filename);
+                await sharp(resizedImage).toFile(filepath);
+                console.log(`Saved resized image to ${filepath}`);
+
+                // Remove temporary file if necessary
+                fs.unlink(req.file.path, (err) => {
+                    if (err) {
+                        console.error('Error removing temporary file:', err);
+                    } else {
+                        console.log('Temporary file removed successfully');
+                    }
+                });
+
+                user.photoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
+            } catch (imageError) {
+                console.error('Error processing image:', imageError);
+                return res.status(400).json({ error: 'Invalid image input' });
+            }
+        } else {
+            console.log('No file uploaded');
+        }
+
+        await user.save();
+        console.log('User profile updated successfully');
+
+        res.json({ message: 'Profile updated successfully', user });
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        res.status(500).json({ error: 'An error occurred while updating the profile' });
     }
-
-    if (req.body.name !== undefined && req.body.name !== null) {
-      console.log(`Updating user name to ${req.body.name}`);
-      user.name = req.body.name;
-    }
-
-    if (req.file) {
-      console.log('Received file:', req.file);
-      console.log('File path:', req.file.path);
-
-      try {
-        console.log('Processing profile image');
-
-        const resizedImage = await sharp(req.file.path)
-          .resize({ width: 300, height: 300 })
-          .toBuffer();
-
-        const filename = `${Date.now()}-${req.file.originalname}`;
-        const filepath = path.join(__dirname, '../public/uploads/', filename);
-        await sharp(resizedImage).toFile(filepath);
-        console.log(`Saved resized image to ${filepath}`);
-
-        user.photoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
-      } catch (imageError) {
-        console.error('Error processing image:', imageError);
-        return res.status(400).json({ error: 'Invalid image input' });
-      }
-    } else {
-      console.log('No file uploaded');
-    }
-
-    await user.save();
-    console.log('User profile updated successfully');
-
-    res.json({ message: 'Profile updated successfully', user });
-  } catch (error) {
-    console.error('Error updating user profile:', error);
-    res.status(500).json({ error: 'An error occurred while updating the profile' });
-  }
 };

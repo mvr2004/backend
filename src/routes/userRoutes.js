@@ -4,7 +4,6 @@ const userController = require('../controllers/userController'); // Importando o
 const router = express.Router();
 const upload = require('../config/uploadConfig');
 
-;
 
 router.post('/register', userController.register); // Usando userController.register
 router.get('/data', userController.getData); // Usando userController.getData
