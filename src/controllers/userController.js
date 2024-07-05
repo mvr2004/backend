@@ -186,6 +186,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 
+
 exports.updateUserProfile = async (req, res) => {
   try {
     console.log('Request received to update user profile');
@@ -219,14 +220,14 @@ exports.updateUserProfile = async (req, res) => {
 
         // Gerar nome de arquivo único baseado no timestamp
         const filename = `${Date.now()}-${req.file.originalname}`;
-        const filepath = path.join(__dirname, '../uploads/', filename);
+        const filepath = path.join(__dirname, '../../public/uploads/', filename);
 
         // Salvar a imagem redimensionada no sistema de arquivos
         await sharp(resizedImage).toFile(filepath);
         console.log(`Saved resized image to ${filepath}`);
 
         // Atualizar o URL da foto do usuário
-        user.photoUrl = filepath;
+        user.photoUrl = `/uploads/${filename}`;
       } catch (imageError) {
         console.error('Error processing image:', imageError);
         return res.status(400).json({ error: 'Invalid image input' });

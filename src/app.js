@@ -19,6 +19,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 // Configuração do Multer com sharp para redimensionar imagens
 const storage = multer.memoryStorage(); // Usar memoryStorage para trabalhar com buffers de imagem
 const upload = multer({ 
