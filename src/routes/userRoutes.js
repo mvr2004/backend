@@ -14,10 +14,6 @@ router.post('/updateCentro', userController.updateCentro);
 router.post('/forgotPassword', userController.forgotPassword); 
 router.post('/resetPassword', userController.resetPassword); 
 router.put('/updateProfile/:id', upload.single('photo'), userController.updateUserProfile);
-
-
-
-// Rota para obter os dados do usuário pelo ID
 router.get('/getUserData/:userId', userController.getUserData);
 
 module.exports = router;

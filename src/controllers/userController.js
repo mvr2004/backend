@@ -3,9 +3,9 @@ const path = require('path');
 const sharp = require('sharp');
 const multer = require('multer');
 const fs = require('fs');
-const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
+const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
 const upload = require('../config/uploadConfig'); 
 
@@ -186,47 +186,35 @@ exports.resetPassword = async (req, res) => {
 };
 
 
-
 exports.updateUserProfile = async (req, res) => {
   try {
     console.log('Request received to update user profile');
-
-    // Encontrar o usuário pelo ID
     const user = await User.findByPk(req.params.id);
     if (!user) {
       console.log(`User with ID ${req.params.id} not found`);
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Atualizar o nome se fornecido no corpo da requisição
     if (req.body.name !== undefined && req.body.name !== null) {
       console.log(`Updating user name to ${req.body.name}`);
       user.name = req.body.name;
     }
 
-    // Verificar se um arquivo foi enviado
     if (req.file) {
       console.log('Received file:', req.file);
-      console.log('File path:', req.file.path); // Verificar o caminho do arquivo
+      console.log('File path:', req.file.path);
 
       try {
-        // Processar a imagem se enviada na requisição
         console.log('Processing profile image');
-
-        // Redimensionar a imagem usando sharp
         const resizedImage = await sharp(req.file.path)
           .resize({ width: 300, height: 300 })
           .toBuffer();
 
-        // Gerar nome de arquivo único baseado no timestamp
         const filename = `${Date.now()}-${req.file.originalname}`;
         const filepath = path.join(__dirname, '../../public/uploads/', filename);
 
-        // Salvar a imagem redimensionada no sistema de arquivos
         await sharp(resizedImage).toFile(filepath);
         console.log(`Saved resized image to ${filepath}`);
-
-        // Atualizar o URL da foto do usuário
         user.photoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
       } catch (imageError) {
         console.error('Error processing image:', imageError);
@@ -236,11 +224,8 @@ exports.updateUserProfile = async (req, res) => {
       console.log('No file uploaded');
     }
 
-    // Salvar as alterações no banco de dados
     await user.save();
     console.log('User profile updated successfully');
-
-    // Responder com sucesso e os dados atualizados do usuário
     res.json({ message: 'Profile updated successfully', user });
   } catch (error) {
     console.error('Error updating user profile:', error);
