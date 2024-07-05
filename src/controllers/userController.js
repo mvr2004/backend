@@ -185,14 +185,6 @@ exports.resetPassword = async (req, res) => {
 };
 
 
-// controllers/userController.js
-
-const fs = require('fs');
-const path = require('path');
-const sharp = require('sharp');
-const User = require('../models/User');
-const { validationResult } = require('express-validator');
-
 exports.updateUserProfile = async (req, res) => {
   try {
     console.log('Request received to update user profile');
