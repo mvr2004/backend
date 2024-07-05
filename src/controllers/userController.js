@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const sharp = require('sharp');
 const multer = require('multer');
+const fs = require('fs');
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
@@ -204,22 +205,36 @@ exports.updateUserProfile = async (req, res) => {
     // Processar a imagem se enviada na requisição
     if (req.file) {
       console.log('Processing profile image');
+      try {
+        // Verificar se o buffer da imagem é válido
+        if (!req.file.buffer || !Buffer.isBuffer(req.file.buffer)) {
+          throw new Error('Invalid image buffer');
+        }
 
-      // Redimensionar a imagem usando sharp
-      const resizedImage = await sharp(req.file.buffer)
-        .resize({ width: 300, height: 300 })
-        .toBuffer();
+        // Redimensionar a imagem usando sharp
+        const resizedImage = await sharp(req.file.buffer)
+          .resize({ width: 300, height: 300 })
+          .toBuffer();
 
-      // Gerar nome de arquivo único baseado no timestamp
-      const filename = `${Date.now()}-${req.file.originalname}`;
-      const filepath = path.join(__dirname, '../uploads/', filename);
+        // Gerar nome de arquivo único baseado no timestamp
+        const filename = `${Date.now()}-${req.file.originalname}`;
+        const filepath = path.join(__dirname, '../uploads/', filename);
 
-      // Salvar a imagem redimensionada no sistema de arquivos
-      await sharp(resizedImage).toFile(filepath);
-      console.log(`Saved resized image to ${filepath}`);
+        // Criar o diretório de uploads se não existir
+        if (!fs.existsSync(path.join(__dirname, '../uploads'))) {
+          fs.mkdirSync(path.join(__dirname, '../uploads'), { recursive: true });
+        }
 
-      // Atualizar o URL da foto do usuário
-      user.photoUrl = filepath;
+        // Salvar a imagem redimensionada no sistema de arquivos
+        await sharp(resizedImage).toFile(filepath);
+        console.log(`Saved resized image to ${filepath}`);
+
+        // Atualizar o URL da foto do usuário
+        user.photoUrl = filepath;
+      } catch (imageError) {
+        console.error('Error processing image:', imageError);
+        return res.status(400).json({ error: 'Invalid image input' });
+      }
     }
 
     // Salvar as alterações no banco de dados
