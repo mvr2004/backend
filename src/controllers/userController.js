@@ -185,10 +185,10 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-
 exports.updateUserProfile = async (req, res) => {
   try {
     console.log('Request received to update user profile');
+
     const user = await User.findByPk(req.params.id);
     if (!user) {
       console.log(`User with ID ${req.params.id} not found`);
@@ -206,16 +206,17 @@ exports.updateUserProfile = async (req, res) => {
 
       try {
         console.log('Processing profile image');
+
         const resizedImage = await sharp(req.file.path)
           .resize({ width: 300, height: 300 })
           .toBuffer();
 
         const filename = `${Date.now()}-${req.file.originalname}`;
-        const filepath = path.join(__dirname, '../../public/uploads/', filename);
-
+        const filepath = path.join(__dirname, '../public/uploads/', filename);
         await sharp(resizedImage).toFile(filepath);
         console.log(`Saved resized image to ${filepath}`);
-        user.photoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
+
+        user.photoUrl = `/uploads/${filename}`;
       } catch (imageError) {
         console.error('Error processing image:', imageError);
         return res.status(400).json({ error: 'Invalid image input' });
@@ -226,6 +227,7 @@ exports.updateUserProfile = async (req, res) => {
 
     await user.save();
     console.log('User profile updated successfully');
+
     res.json({ message: 'Profile updated successfully', user });
   } catch (error) {
     console.error('Error updating user profile:', error);
