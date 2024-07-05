@@ -7,6 +7,7 @@ const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCe
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
 const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
+const upload = require('../config/uploadConfig'); 
 
 exports.register = async (req, res) => {
   const { name, email, password, photoUrl } = req.body;
@@ -205,25 +206,20 @@ exports.updateUserProfile = async (req, res) => {
     // Verificar se um arquivo foi enviado
     if (req.file) {
       console.log('Received file:', req.file);
-      console.log('File buffer length:', req.file.buffer.length); // Verificar o tamanho do buffer
+      console.log('File path:', req.file.path); // Verificar o caminho do arquivo
 
       try {
         // Processar a imagem se enviada na requisição
         console.log('Processing profile image');
 
         // Redimensionar a imagem usando sharp
-        const resizedImage = await sharp(req.file.buffer)
+        const resizedImage = await sharp(req.file.path)
           .resize({ width: 300, height: 300 })
           .toBuffer();
 
         // Gerar nome de arquivo único baseado no timestamp
         const filename = `${Date.now()}-${req.file.originalname}`;
         const filepath = path.join(__dirname, '../uploads/', filename);
-
-        // Criar o diretório de uploads se não existir
-        if (!fs.existsSync(path.join(__dirname, '../uploads'))) {
-          fs.mkdirSync(path.join(__dirname, '../uploads'), { recursive: true });
-        }
 
         // Salvar a imagem redimensionada no sistema de arquivos
         await sharp(resizedImage).toFile(filepath);
