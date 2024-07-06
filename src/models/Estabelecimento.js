@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 const Subarea = require('./Subarea');
+const Centro = require('./Centro');
 
 const Estabelecimento = sequelize.define('Estabelecimento', {
     id: {
