@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
-const Area = require('./Area'); // Importe o modelo Area aqui, se estiver em um arquivo separado
+const Area = require('./Area');
 
 const Subarea = sequelize.define('Subarea', {
   id: {
@@ -8,24 +8,24 @@ const Subarea = sequelize.define('Subarea', {
     primaryKey: true,
     autoIncrement: true
   },
-  nome: {
+  nomeSubarea: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
   },
   areaId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
     references: {
-      model: 'Area',
+      model: Area,
       key: 'id'
     }
-  },
+  }
 }, {
   timestamps: false
 });
 
-// Definindo a associação com Area
+// Definindo a associação
+Area.hasMany(Subarea, { foreignKey: 'areaId' });
 Subarea.belongsTo(Area, { foreignKey: 'areaId' });
 
 module.exports = Subarea;

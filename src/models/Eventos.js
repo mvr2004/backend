@@ -1,8 +1,9 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 const Subarea = require('./Subarea');
+const Utilizador = require('./User');
 
-const Estabelecimento = sequelize.define('Estabelecimento', {
+const Evento = sequelize.define('Evento', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -16,19 +17,15 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    contacto: {
-        type: DataTypes.STRING,
+    data: {
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
-    descriscao: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    pago: {
-        type: DataTypes.BOOLEAN,
+    hora: {
+        type: DataTypes.TIME,
         allowNull: false
     },
-    foto: {
+    descricao: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -38,12 +35,22 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
             model: Subarea,
             key: 'id'
         }
+    },
+    utilizadorId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Utilizador,
+            key: 'id'
+        }
     }
 }, {
-    timestamps: false
+    timestamps: true
 });
 
-Subarea.hasMany(Estabelecimento, { foreignKey: 'subareaId' });
-Estabelecimento.belongsTo(Subarea, { foreignKey: 'subareaId' });
+Subarea.hasMany(Evento, { foreignKey: 'subareaId' });
+Evento.belongsTo(Subarea, { foreignKey: 'subareaId' });
 
-module.exports = Estabelecimento;
+Utilizador.hasMany(Evento, { foreignKey: 'utilizadorId' });
+Evento.belongsTo(Utilizador, { foreignKey: 'utilizadorId' });
+
+module.exports = Evento;
