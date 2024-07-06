@@ -5,6 +5,8 @@ const multer = require('multer');
 const fs = require('fs');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
+const Estabelecimento = require('../models/Estabelecimento');
+const Subarea = require('../models/SubArea'); 
 const upload = require('../config/uploadConfig'); 
 
 const establishmentService = require('../services/EstabelecimentoService');
