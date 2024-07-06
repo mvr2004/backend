@@ -8,7 +8,7 @@ const router = express.Router();const upload = require('../config/uploadConfig')
 router.post('/criarestab', establishmentController.createEstablishment);
 
 // Rota para buscar todos os estabelecimentos
-router.get('/estabelecimentos', establishmentController.getAllEstablishments);
+router.get('/allestab', establishmentController.getAllEstablishments);
 
 // Rota para buscar estabelecimentos por uma ou várias áreas de interesse
 router.get('/estabelecimentos/por-area', establishmentController.getEstablishmentsBySubareas);

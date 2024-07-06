@@ -5,6 +5,8 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const genericRoutes = require('./routes/genericRoutes');  // Importação correta de genericRoutes
+const areaRoutes = require('./routes/areaRoutes'); // Importe as rotas de área
+const estabRoutes = require('./routes/estabelecimentoRoutes'); // Importe as rotas de área
 const sequelize = require('./config/dbConfig');
 const errorHandler = require('./middleware/errorHandler');
 const dotenv = require('dotenv');
@@ -22,6 +24,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/generic', genericRoutes);  // Utilização de genericRoutes
+app.use('/areas', areaRoutes); // Utilize as rotas de área
+app.use('/estab', estabRoutes)
+
 
 app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
