@@ -1,23 +1,24 @@
 // src/routes/estabelecimentoRoutes.js
 const express = require('express');
-const userController = require('../controllers/estabelecimentoController'); // Importando o userController
+const estabelecimentoController = require('../controllers/estabelecimentoController'); 
 const avaliacaoEstabelecimentoController = require('../controllers/avaliacaoEstabelecimentoController');
-const router = express.Router();const upload = require('../config/uploadConfig');
+const router = express.Router();
+const upload = require('../config/uploadConfig');
 
 
-router.post('/criarestab', establishmentController.createEstablishment);
+router.post('/criarestab', estabelecimentoController.createEstablishment);
 
 // Rota para buscar todos os estabelecimentos
-router.get('/allestab', establishmentController.getAllEstablishments);
+router.get('/allestab', estabelecimentoController.getAllEstablishments);
 
 // Rota para buscar o estabelecimento pelo nome
-router.get('/estabname', establishmentController.getEstablishmentsByName);
+router.get('/estabname', estabelecimentoController.getEstablishmentsByName);
 
 // Rota para buscar estabelecimentos por uma ou várias áreas de interesse
-router.get('/estabareaecemtrp', establishmentController.getEstablishmentsByAreasAndCentro);
+router.get('/estabareaecemtrp', estabelecimentoController.getEstablishmentsByAreasAndCentro);
 
 // Rota para buscar um estabelecimento pelo ID
-router.get('/estab/:id', establishmentController.getEstablishmentById);
+router.get('/estab/:id', estabelecimentoController.getEstablishmentById);
 
 
 // Rota para criar uma avaliação de estabelecimento
