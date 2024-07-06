@@ -1,5 +1,5 @@
 const Area = require('../models/Area');
-const Subarea = require('../config/Subarea'); 
+const Subarea = require('../models/Subarea'); 
 
 
 // Controller para consultar todas as áreas
