@@ -1,7 +1,7 @@
 // services/establishmentService.js
 
 const Estabelecimento = require('../models/Estabelecimento');
-const Subarea = require('../models/SubArea'); 
+const Subarea = require('../models/Subarea'); 
 const upload = require('../config/uploadConfig');
 const sharp = require('sharp');
 const fs = require('fs');
