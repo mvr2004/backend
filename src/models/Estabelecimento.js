@@ -39,10 +39,9 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
             model: Subarea,
             key: 'id'
         }
-    }
+    },
 	centroId: { 
         type: DataTypes.INTEGER,
-		allowNull: false,
         references: {
             model: Centro,
             key: 'id'
