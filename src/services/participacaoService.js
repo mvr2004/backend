@@ -1,6 +1,6 @@
 // services/participacaoService.js
 
-const ParticipacaoEvento = require('../models/ParticipacaoEvento');
+const ParticipacaoEvento = require('../models/UserEvento');
 const Utilizador = require('../models/User');
 const Evento = require('../models/Evento');
 
