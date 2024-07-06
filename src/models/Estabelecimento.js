@@ -42,6 +42,7 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
     }
 	centroId: { 
         type: DataTypes.INTEGER,
+		allowNull: false,
         references: {
             model: Centro,
             key: 'id'
