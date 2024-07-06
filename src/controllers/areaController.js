@@ -1,4 +1,6 @@
-const { Area, Subarea } = require('../models');
+const Area = require('../models/Area');
+const Subarea = require('../config/Subarea'); 
+
 
 // Controller para consultar todas as áreas
 const getAllAreas = async (req, res, next) => {
