@@ -1,6 +1,6 @@
 // controllers/establishmentController.js
 
-const establishmentService = require('../services/establishmentService');
+const establishmentService = require('../services/estabelecimentoService');
 
 // Controlador para criar um novo estabelecimento
 const createEstablishment = async (req, res, next) => {
