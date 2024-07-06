@@ -39,11 +39,22 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
             key: 'id'
         }
     }
+	centroId: { d
+        type: DataTypes.INTEGER,
+        references: {
+            model: Centro,
+            key: 'id'
+        }
+    }
 }, {
     timestamps: false
 });
 
 Subarea.hasMany(Estabelecimento, { foreignKey: 'subareaId' });
 Estabelecimento.belongsTo(Subarea, { foreignKey: 'subareaId' });
+
+
+Centro.hasMany(Estabelecimento, { foreignKey: 'centroId' });
+Estabelecimento.belongsTo(Centro, { foreignKey: 'centroId' });
 
 module.exports = Estabelecimento;

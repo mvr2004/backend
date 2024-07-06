@@ -14,5 +14,7 @@ router.post('/forgotPassword', userController.forgotPassword);
 router.post('/resetPassword', userController.resetPassword); 
 router.put('/updateProfile/:id', upload.single('photo'), userController.updateUserProfile);
 router.get('/getUserData/:userId', userController.getUserData);
+router.get('/getUserData/:userId', userController.getUserData);
+
 
 module.exports = router;

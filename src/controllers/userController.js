@@ -5,6 +5,7 @@ const multer = require('multer');
 const fs = require('fs');
 const User = require('../models/User');                                                              
 const Centro = require('../models/Centro');
+const UserArea = require('../models/UserArea');
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
 const upload = require('../config/uploadConfig'); 
@@ -242,4 +243,23 @@ exports.updateUserProfile = async (req, res) => {
         console.error('Error updating user profile:', error);
         res.status(500).json({ error: 'An error occurred while updating the profile' });
     }
+};
+
+
+exports.getUserAreas = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    const areas = await user.getAreas(); // Assume que existe um método 'getAreas' definido na relação muitos-para-muitos
+
+    res.json({ areas });
+  } catch (err) {
+    console.error(`Erro ao buscar áreas do usuário: ${err.message}`);
+    res.status(500).json({ message: `Erro ao buscar áreas do usuário: ${err.message}` });
+  }
 };

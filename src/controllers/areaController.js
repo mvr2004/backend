@@ -1,5 +1,6 @@
 const Area = require('../models/Area');
 const Subarea = require('../models/Subarea'); 
+const UserArea = require('../models/UserArea');
 
 
 // Controller para consultar todas as áreas
@@ -28,7 +29,22 @@ const getSubareasByAreaId = async (req, res, next) => {
   }
 };
 
+
+// Controller para associar um usuário a uma área
+const associateUserWithArea = async (req, res, next) => {
+  try {
+    const { userId, areaId } = req.body;
+    const association = await UserArea.create({ userId, areaId });
+    res.status(201).json({ association });
+  } catch (error) {
+    console.error('Erro ao associar usuário com área:', error);
+    next(error);
+  }
+};
+
+
 module.exports = {
   getAllAreas,
   getSubareasByAreaId,
+  associateUserWithArea,
 };

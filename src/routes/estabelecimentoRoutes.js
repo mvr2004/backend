@@ -10,11 +10,14 @@ router.post('/criarestab', establishmentController.createEstablishment);
 // Rota para buscar todos os estabelecimentos
 router.get('/allestab', establishmentController.getAllEstablishments);
 
+// Rota para buscar o estabelecimento pelo nome
+router.get('/estabname', establishmentController.getEstablishmentsByName);
+
 // Rota para buscar estabelecimentos por uma ou várias áreas de interesse
-router.get('/estabelecimentos/por-area', establishmentController.getEstablishmentsBySubareas);
+router.get('/estabareaecemtrp', establishmentController.getEstablishmentsByAreasAndCentro);
 
 // Rota para buscar um estabelecimento pelo ID
-router.get('/estabelecimentos/:id', establishmentController.getEstablishmentById);
+router.get('/estab/:id', establishmentController.getEstablishmentById);
 
 
 // Rota para criar uma avaliação de estabelecimento

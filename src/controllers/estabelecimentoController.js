@@ -1,15 +1,6 @@
-const bcrypt = require('bcrypt');
-const path = require('path');
-const sharp = require('sharp');
-const multer = require('multer');
-const fs = require('fs');
-const User = require('../models/User');                                                              
-const Centro = require('../models/Centro');
-const Estabelecimento = require('../models/Estabelecimento');
-const Subarea = require('../models/Subarea'); 
-const upload = require('../config/uploadConfig'); 
+// controllers/establishmentController.js
 
-const establishmentService = require('../services/EstabelecimentoService');
+const establishmentService = require('../services/establishmentService');
 
 // Controlador para criar um novo estabelecimento
 const createEstablishment = async (req, res, next) => {
@@ -32,14 +23,26 @@ const getAllEstablishments = async (req, res, next) => {
   }
 };
 
-// Controlador para buscar estabelecimentos por uma ou várias áreas de interesse
-const getEstablishmentsBySubareas = async (req, res, next) => {
-  const { subareaIds } = req.query;
+// Controlador para buscar estabelecimentos por nome
+const getEstablishmentsByName = async (req, res, next) => {
+  const { nome } = req.query;
   try {
-    const establishments = await establishmentService.getEstablishmentsBySubareas(subareaIds);
+    const establishments = await establishmentService.getEstablishmentsByName(nome);
     res.json({ establishments });
   } catch (error) {
-    console.error('Erro ao buscar estabelecimentos por áreas de interesse:', error);
+    console.error('Erro ao buscar estabelecimentos por nome:', error);
+    next(error);
+  }
+};
+
+// Controlador para buscar estabelecimentos por uma ou várias áreas de interesse e centro
+const getEstablishmentsByAreasAndCentro = async (req, res, next) => {
+  const { areaIds, centroId } = req.query;
+  try {
+    const establishments = await establishmentService.getEstablishmentsByAreasAndCentro(areaIds, centroId);
+    res.json({ establishments });
+  } catch (error) {
+    console.error('Erro ao buscar estabelecimentos por áreas de interesse e centro:', error);
     next(error);
   }
 };
@@ -59,9 +62,10 @@ const getEstablishmentById = async (req, res, next) => {
   }
 };
 
-
 module.exports = {
+  createEstablishment,
   getAllEstablishments,
-  getEstablishmentsBySubareas,
+  getEstablishmentsByName,
+  getEstablishmentsBySubareasAndCentro,
   getEstablishmentById,
 };

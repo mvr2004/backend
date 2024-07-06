@@ -1,7 +1,10 @@
+// models/Evento.js
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 const Subarea = require('./Subarea');
 const Utilizador = require('./User');
+const Centro = require('./Centro');
 
 const Evento = sequelize.define('Evento', {
     id: {
@@ -42,6 +45,13 @@ const Evento = sequelize.define('Evento', {
             model: Utilizador,
             key: 'id'
         }
+    },
+    centroId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Centro,
+            key: 'id'
+        }
     }
 }, {
     timestamps: true
@@ -52,5 +62,8 @@ Evento.belongsTo(Subarea, { foreignKey: 'subareaId' });
 
 Utilizador.hasMany(Evento, { foreignKey: 'utilizadorId' });
 Evento.belongsTo(Utilizador, { foreignKey: 'utilizadorId' });
+
+Centro.hasMany(Evento, { foreignKey: 'centroId' });
+Evento.belongsTo(Centro, { foreignKey: 'centroId' });
 
 module.exports = Evento;

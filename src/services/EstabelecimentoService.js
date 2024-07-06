@@ -1,7 +1,9 @@
 // services/establishmentService.js
 
 const Estabelecimento = require('../models/Estabelecimento');
-const Subarea = require('../models/Subarea'); 
+const Subarea = require('../models/Subarea');
+const Area = require('../models/Area');
+const Centro = require('../models/Centro');
 const upload = require('../config/uploadConfig');
 const sharp = require('sharp');
 const fs = require('fs');
@@ -21,7 +23,7 @@ const checkExistingEstablishment = async (nome, localizacao) => {
 // Função para criar um novo estabelecimento com upload de fotografia
 const createEstablishment = async (req, res, next) => {
   try {
-    const { nome, localizacao, contacto, descricao, pago, subareaId } = req.body;
+    const { nome, localizacao, contacto, descricao, pago, subareaId, centroId } = req.body;
 
     // Verifica se já existe um estabelecimento com o mesmo nome ou localização
     const existingEstablishment = await checkExistingEstablishment(nome, localizacao);
@@ -69,7 +71,8 @@ const createEstablishment = async (req, res, next) => {
           descricao,
           pago,
           foto: `https://backend-9hij.onrender.com/uploads/${filename}`, // URL pública da imagem
-          subareaId
+          subareaId,
+          centroId
         });
 
         res.status(201).json({ establishment });
@@ -90,19 +93,61 @@ const getAllEstablishments = async () => {
     include: [{
       model: Subarea,
       attributes: ['id', 'nome'],
+    }, {
+      model: Centro,
+      attributes: ['id', 'nome'],
     }],
   });
   return establishments;
 };
 
-// Função para buscar estabelecimentos por uma ou várias áreas de interesse
-const getEstablishmentsBySubareas = async (subareaIds) => {
+// Função para buscar estabelecimentos por nome
+const getEstablishmentsByName = async (name) => {
   const establishments = await Estabelecimento.findAll({
     where: {
-      subareaId: subareaIds
+      nome: name
     },
     include: [{
       model: Subarea,
+      attributes: ['id', 'nome'],
+    }, {
+      model: Centro,
+      attributes: ['id', 'nome'],
+    }],
+  });
+  return establishments;
+};
+
+// Função para buscar estabelecimentos por uma ou várias áreas de interesse e centro
+const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
+  // Buscar subáreas que pertencem às áreas de interesse fornecidas
+  const subareas = await Subarea.findAll({
+    where: {
+      areaId: areaIds
+    }
+  });
+
+  const subareaIds = subareas.map(subarea => subarea.id);
+
+  const whereClause = {
+    subareaId: subareaIds
+  };
+
+  if (centroId) {
+    whereClause.centroId = centroId;
+  }
+
+  const establishments = await Estabelecimento.findAll({
+    where: whereClause,
+    include: [{
+      model: Subarea,
+      attributes: ['id', 'nome'],
+      include: {
+        model: Area,
+        attributes: ['id', 'nomeArea'],
+      },
+    }, {
+      model: Centro,
       attributes: ['id', 'nome'],
     }],
   });
@@ -115,15 +160,22 @@ const getEstablishmentById = async (id) => {
     include: [{
       model: Subarea,
       attributes: ['id', 'nome'],
+      include: {
+        model: Area,
+        attributes: ['id', 'nomeArea'],
+      },
+    }, {
+      model: Centro,
+      attributes: ['id', 'nome'],
     }],
   });
   return establishment;
 };
 
-
 module.exports = {
   createEstablishment,
-   getAllEstablishments,
-  getEstablishmentsBySubareas,
+  getAllEstablishments,
+  getEstablishmentsByName,
+  getEstablishmentsBySubareasAndCentro,
   getEstablishmentById,
 };
