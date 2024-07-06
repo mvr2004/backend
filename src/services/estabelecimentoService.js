@@ -176,6 +176,6 @@ module.exports = {
   createEstablishment,
   getAllEstablishments,
   getEstablishmentsByName,
-  getEstablishmentsBySubareasAndCentro,
+  getEstablishmentsByAreasAndCentro,
   getEstablishmentById,
 };
