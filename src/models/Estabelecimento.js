@@ -40,7 +40,7 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
             key: 'id'
         }
     }
-	centroId: { d
+	centroId: { 
         type: DataTypes.INTEGER,
         references: {
             model: Centro,
