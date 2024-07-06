@@ -24,8 +24,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/generic', genericRoutes);  // Utilização de genericRoutes
+app.use('/estab', estabRoutes);
 app.use('/areas', areaRoutes); // Utilize as rotas de área
-app.use('/estab', estabRoutes)
+
 
 
 app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
