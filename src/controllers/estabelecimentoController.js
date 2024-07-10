@@ -159,13 +159,15 @@ const getEstablishmentById = async (req, res, next) => {
   }
 };
 
-// controllers/avaliacaoEstabelecimentoController.js
+
+// Create a review for an establishment
 const createEstabelecimentoReview = async (req, res, next) => {
   const { establishmentId, userId, rating } = req.body;
 
   console.log('Creating review for establishmentId:', establishmentId); // Add this line
 
   try {
+    // Fetch the establishment by ID
     const estabelecimento = await Estabelecimento.findByPk(establishmentId);
 
     if (!estabelecimento) {
@@ -173,6 +175,7 @@ const createEstabelecimentoReview = async (req, res, next) => {
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
+    // Create the review
     const review = await AvEstabelecimento.create({
       establishmentId,
       userId,

@@ -153,14 +153,14 @@ const createEstabelecimentoReview = async (data) => {
   const { establishmentId, userId, rating } = data;
 
   try {
-    // Verifica se o estabelecimento existe
+    // Fetch the establishment by ID
     const estabelecimento = await Estabelecimento.findByPk(establishmentId);
 
     if (!estabelecimento) {
       throw new Error('Estabelecimento não encontrado.');
     }
 
-    // Cria a avaliação do estabelecimento
+    // Create the review
     const review = await AvEstabelecimento.create({
       establishmentId,
       userId,
