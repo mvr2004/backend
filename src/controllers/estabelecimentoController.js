@@ -96,7 +96,7 @@ const createEstablishment = async (req, res, next) => {
 // Controlador para buscar todos os estabelecimentos
 const getAllEstablishments = async (req, res, next) => {
   try {
-    const establishments = await establishmentService.getAllEstablishments();
+    const establishments = await estabelecimentoService.getAllEstablishments();
     res.json({ establishments });
   } catch (error) {
     console.error('Erro ao buscar todos os estabelecimentos:', error);
@@ -108,7 +108,7 @@ const getAllEstablishments = async (req, res, next) => {
 const getEstablishmentsByName = async (req, res, next) => {
   const { nome } = req.query;
   try {
-    const establishments = await establishmentService.getEstablishmentsByName(nome);
+    const establishments = await estabelecimentoService.getEstablishmentsByName(nome);
     res.json({ establishments });
   } catch (error) {
     console.error('Erro ao buscar estabelecimentos por nome:', error);
@@ -133,7 +133,7 @@ const getEstablishmentsByAreasAndCentro = async (req, res, next) => {
       throw new Error('IDs de área inválidos');
     }
 
-    const establishments = await establishmentService.getEstablishmentsByAreasAndCentro(areaIdsArray, centroId);
+    const establishments = await estabelecimentoService.getEstablishmentsByAreasAndCentro(areaIdsArray, centroId);
     res.json({ establishments });
   } catch (error) {
     console.error('Erro ao buscar estabelecimentos por áreas de interesse e centro:', error.message);
@@ -147,7 +147,7 @@ const getEstablishmentsByAreasAndCentro = async (req, res, next) => {
 const getEstablishmentById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const establishment = await establishmentService.getEstablishmentById(id);
+    const establishment = await estabelecimentoService.getEstablishmentById(id);
     if (!establishment) {
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
