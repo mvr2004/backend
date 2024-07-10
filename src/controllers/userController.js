@@ -263,3 +263,41 @@ exports.getUserAreas = async (req, res) => {
     res.status(500).json({ message: `Erro ao buscar áreas do usuário: ${err.message}` });
   }
 };
+
+
+exports.getUserAreas = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const userAreas = await UserArea.findAll({
+      where: { userId },
+      include: [Area]
+    });
+
+    const areas = userAreas.map(userArea => userArea.Area);
+
+    res.json({ areas });
+  } catch (err) {
+    console.error(`Erro ao buscar áreas do usuário: ${err.message}`);
+    res.status(500).json({ message: `Erro ao buscar áreas do usuário: ${err.message}` });
+  }
+};
+
+exports.updateUserAreas = async (req, res) => {
+  const { userId, areaIds } = req.body;
+
+  try {
+    // Remove todas as associações existentes do usuário
+    await UserArea.destroy({ where: { userId } });
+
+    // Cria novas associações com as áreas selecionadas
+    const associations = areaIds.map(areaId => ({ userId, areaId }));
+    await UserArea.bulkCreate(associations);
+
+    res.status(200).json({ message: 'Áreas de interesse atualizadas com sucesso' });
+  } catch (err) {
+    console.error(`Erro ao atualizar áreas de interesse do usuário: ${err.message}`);
+    res.status(500).json({ message: `Erro ao atualizar áreas de interesse do usuário: ${err.message}` });
+  }
+};
+
