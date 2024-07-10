@@ -25,6 +25,13 @@ const createEstablishment = async (req, res, next) => {
   try {
     const { nome, localizacao, contacto, descricao, pago, subareaId, centroId } = req.body;
 
+    console.log('Dados recebidos:', req.body);
+
+    // Verifica se os campos 'nome' e 'localizacao' estão presentes e não vazios
+    if (!nome || !localizacao) {
+      console.log('Erro: Nome ou localização não fornecidos');
+      return res.status(400).json({ error: 'Nome e localização são obrigatórios.' });
+    }
 
     const existingEstablishment = await checkExistingEstablishment(nome, localizacao);
     if (existingEstablishment) {
