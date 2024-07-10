@@ -1,4 +1,4 @@
-// services/eventService.js
+// services/eventoService.js
 
 const Evento = require('../models/Evento');
 const Subarea = require('../models/Subarea');

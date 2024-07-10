@@ -1,4 +1,4 @@
-// controllers/eventController.js
+// controllers/eventoController.js
 
 const eventService = require('../services/eventoService');
 
