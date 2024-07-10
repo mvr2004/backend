@@ -1,5 +1,6 @@
 // controllers/avaliacaoEstabelecimentoController.js
 
+const { sequelize } = require('../config/dbConfig');
 const User = require('../models/User');
 const Estabelecimento = require('../models/Estabelecimento');
 const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
@@ -86,7 +87,6 @@ const calculateEstabelecimentoAverageRating = async (req, res, next) => {
     next(error);
   }
 };
-
 
 module.exports = {
   createEstabelecimentoReview,
