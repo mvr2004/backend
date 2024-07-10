@@ -7,23 +7,25 @@ const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
 // Controlador para criar uma nova avaliação de estabelecimento
 const createEstabelecimentoReview = async (req, res, next) => {
   try {
-    const { userId, estabelecimentoId, rating } = req.body;
+    const { userId, establishmentId, rating } = req.body;
 
     // Verifica se o usuário e o estabelecimento existem
     const user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado.' });
+      console.log('Usuário não encontrado com id:', userId);
+      return res.status(404).json({ error: 'Utilizador não encontrado.' });
     }
 
-    const estabelecimento = await Estabelecimento.findByPk(estabelecimentoId);
+    const estabelecimento = await Estabelecimento.findByPk(establishmentId);
     if (!estabelecimento) {
+      console.log('Estabelecimento não encontrado com id:', establishmentId);
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
     // Cria a avaliação de estabelecimento
     const review = await AvEstabelecimento.create({
       userId,
-      estabelecimentoId,
+      establishmentId,
       rating
     });
 
@@ -34,13 +36,14 @@ const createEstabelecimentoReview = async (req, res, next) => {
   }
 };
 
+
 // Controlador para listar as avaliações de um estabelecimento
 const listEstabelecimentoReviews = async (req, res, next) => {
-  const { estabelecimentoId } = req.params;
+  const { establishmentId } = req.params;
   try {
     // Busca todas as avaliações para o estabelecimento específico
     const reviews = await AvEstabelecimento.findAll({
-      where: { estabelecimentoId },
+      where: { establishmentId },
       include: [{ model: User, attributes: ['id', 'name'] }] // Inclui o nome do usuário na resposta
     });
 
@@ -56,11 +59,11 @@ const listEstabelecimentoReviews = async (req, res, next) => {
 };
 
 const calculateEstabelecimentoAverageRating = async (req, res, next) => {
-  const { estabelecimentoId } = req.params;
+  const { establishmentId } = req.params;
   try {
     // Calcula a média das avaliações para o estabelecimento específico
     const averageRating = await AvEstabelecimento.aggregate('rating', 'avg', {
-      where: { estabelecimentoId }
+      where: { establishmentId }
     });
 
     if (!averageRating) {
