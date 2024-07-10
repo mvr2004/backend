@@ -162,17 +162,15 @@ const getEstablishmentById = async (req, res, next) => {
 // controllers/avaliacaoEstabelecimentoController.js
 
 const createEstabelecimentoReview = async (req, res, next) => {
-  const { establishmentId, userId, rating } = req.body; // Certifique-se de estar recebendo os dados do corpo da requisição
+  const { establishmentId, userId, rating } = req.body;
 
   try {
-    // Verifica se o estabelecimento existe
     const estabelecimento = await Estabelecimento.findByPk(establishmentId);
 
     if (!estabelecimento) {
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
-    // Cria a avaliação do estabelecimento
     const review = await AvEstabelecimento.create({
       establishmentId,
       userId,
@@ -185,7 +183,6 @@ const createEstabelecimentoReview = async (req, res, next) => {
     next(error);
   }
 };
-
 
 
 // Controlador para listar as avaliações de um estabelecimento
