@@ -4,7 +4,7 @@ const Evento = require('../models/Evento');
 const Subarea = require('../models/Subarea');
 const Utilizador = require('../models/User');
 const Centro = require('../models/Centro');
-const AreaInteresse = require('../models/AreaInteresse'); //
+const AreaInteresse = require('../models/UserArea'); //
 
 // Função para criar um novo evento
 const createEvent = async (req, res, next) => {
