@@ -17,6 +17,7 @@ router.get('/estabname', estabelecimentoController.getEstablishmentsByName);
 // Rota para buscar estabelecimentos por uma ou várias áreas de interesse
 router.get('/estabareaecemtrp', estabelecimentoController.getEstablishmentsByAreasAndCentro);
 
+
 // Rota para buscar um estabelecimento pelo ID
 router.get('/estab/:id', estabelecimentoController.getEstablishmentById);
 

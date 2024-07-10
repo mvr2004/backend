@@ -120,38 +120,53 @@ const getEstablishmentsByName = async (name) => {
 
 // Função para buscar estabelecimentos por uma ou várias áreas de interesse e centro
 const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
-  // Buscar subáreas que pertencem às áreas de interesse fornecidas
-  const subareas = await Subarea.findAll({
-    where: {
-      areaId: areaIds
+  try {
+    // Converte areaIds para um array de números
+    const areaIdsArray = areaIds.split(',').map(id => parseInt(id.trim()));
+
+    // Busca subáreas que pertencem às áreas de interesse fornecidas
+    const subareas = await Subarea.findAll({
+      where: {
+        areaId: areaIdsArray
+      }
+    });
+
+    // Extrai os IDs das subáreas encontradas
+    const subareaIds = subareas.map(subarea => subarea.id);
+
+    // Monta a cláusula where para a consulta de estabelecimentos
+    const whereClause = {
+      subareaId: subareaIds
+    };
+
+    // Adiciona o filtro por centroId, se fornecido
+    if (centroId) {
+      whereClause.centroId = centroId;
     }
-  });
 
-  const subareaIds = subareas.map(subarea => subarea.id);
+    // Realiza a consulta de estabelecimentos
+    const establishments = await Estabelecimento.findAll({
+      where: whereClause,
+      include: [
+        {
+          model: Subarea,
+          attributes: ['id', 'nomeSubarea'],
+          include: {
+            model: Area,
+            attributes: ['id', 'nomeArea'],
+          },
+        },
+        {
+          model: Centro,
+          attributes: ['id', 'centro'],
+        },
+      ],
+    });
 
-  const whereClause = {
-    subareaId: subareaIds
-  };
-
-  if (centroId) {
-    whereClause.centroId = centroId;
+    return establishments;
+  } catch (error) {
+    throw new Error(`Erro ao buscar estabelecimentos por áreas de interesse e centro: ${error.message}`);
   }
-
-  const establishments = await Estabelecimento.findAll({
-    where: whereClause,
-    include: [{
-      model: Subarea,
-      attributes: ['id', 'nomeSubarea'],
-      include: {
-        model: Area,
-        attributes: ['id', 'nomeArea'],
-      },
-    }, {
-      model: Centro,
-      attributes: ['id', 'centro'],
-    }],
-  });
-  return establishments;
 };
 
 // Função para buscar um estabelecimento pelo ID

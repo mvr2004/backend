@@ -35,17 +35,21 @@ const getEstablishmentsByName = async (req, res, next) => {
   }
 };
 
-// Controlador para buscar estabelecimentos por uma ou várias áreas de interesse e centro
 const getEstablishmentsByAreasAndCentro = async (req, res, next) => {
   const { areaIds, centroId } = req.query;
+
+  // Converte areaIds para um array de números
+  const areaIdsArray = areaIds.split(',').map(id => parseInt(id));
+
   try {
-    const establishments = await establishmentService.getEstablishmentsByAreasAndCentro(areaIds, centroId);
+    const establishments = await establishmentService.getEstablishmentsByAreasAndCentro(areaIdsArray, centroId);
     res.json({ establishments });
   } catch (error) {
     console.error('Erro ao buscar estabelecimentos por áreas de interesse e centro:', error);
     next(error);
   }
 };
+
 
 // Controlador para buscar um estabelecimento pelo ID
 const getEstablishmentById = async (req, res, next) => {
