@@ -1,3 +1,4 @@
+// src/config/dbConfig.js
 const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
 
@@ -15,4 +16,4 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
   }
 });
 
-module.exports = { sequelize }; // Exportar como um objeto
+module.exports = sequelize;
