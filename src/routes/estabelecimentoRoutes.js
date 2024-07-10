@@ -9,7 +9,7 @@ const upload = require('../config/uploadConfig');
 router.post('/criarestab', estabelecimentoController.createEstablishment);
 
 // Rota para buscar todos os estabelecimentos
-router.get('/allestab', estabelecimentoController.getAllEstablishments);
+router.get('/list', estabelecimentoController.getAllEstablishments);
 
 // Rota para buscar o estabelecimento pelo nome
 router.get('/estabname', estabelecimentoController.getEstablishmentsByName);

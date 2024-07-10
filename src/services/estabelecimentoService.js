@@ -92,7 +92,7 @@ const getAllEstablishments = async () => {
   const establishments = await Estabelecimento.findAll({
     include: [{
       model: Subarea,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'nomeSubarea'],
     }, {
       model: Centro,
       attributes: ['id', 'nome'],
@@ -109,7 +109,7 @@ const getEstablishmentsByName = async (name) => {
     },
     include: [{
       model: Subarea,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'nomeSubarea'],
     }, {
       model: Centro,
       attributes: ['id', 'nome'],
@@ -141,7 +141,7 @@ const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
     where: whereClause,
     include: [{
       model: Subarea,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'nomeSubarea'],
       include: {
         model: Area,
         attributes: ['id', 'nomeArea'],
@@ -159,7 +159,7 @@ const getEstablishmentById = async (id) => {
   const establishment = await Estabelecimento.findByPk(id, {
     include: [{
       model: Subarea,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'nomeSubarea'],
       include: {
         model: Area,
         attributes: ['id', 'nomeArea'],

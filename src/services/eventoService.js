@@ -35,7 +35,7 @@ const getAllEvents = async () => {
     include: [
       {
         model: Subarea,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'nomeSubarea'],
       },
       {
         model: Utilizador,
@@ -74,7 +74,7 @@ const getEventsByAreasAndCentro = async (areaIds, centroId) => {
     include: [
       {
         model: Subarea,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'nomeSubarea'],
       },
       {
         model: Utilizador,
@@ -95,7 +95,7 @@ const getEventById = async (id) => {
     include: [
       {
         model: Subarea,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'nomeSubarea'],
       },
       {
         model: Utilizador,

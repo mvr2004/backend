@@ -5,7 +5,7 @@ const router = express.Router();
 const eventController = require('../controllers/eventoController');
 
 router.post('/create', eventController.createEvent);
-router.get('/', eventController.getAllEvents);
+router.get('/list', eventController.getAllEvents);
 router.get('/searchByAreasAndCentro', eventController.getEventsByAreasAndCentro);
 router.get('/:id', eventController.getEventById);
 
