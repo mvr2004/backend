@@ -6,6 +6,7 @@ const router = express.Router();
 const upload = require('../config/uploadConfig');
 
 
+// Rota para criar um estabelecimento
 router.post('/criarestab', estabelecimentoController.createEstablishment);
 
 // Rota para buscar todos os estabelecimentos
