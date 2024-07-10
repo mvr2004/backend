@@ -50,27 +50,12 @@ const getAllEvents = async () => {
   return events;
 };
 
-// Função para buscar eventos por uma ou várias áreas de interesse e centro
-const getEventsByAreasAndCentro = async (areaIds, centroId) => {
-  // Buscar subáreas que pertencem às áreas de interesse fornecidas
-  const subareas = await Subarea.findAll({
-    where: {
-      areaId: areaIds
-    }
-  });
-
-  const subareaIds = subareas.map(subarea => subarea.id);
-
-  const whereClause = {
-    subareaId: subareaIds
-  };
-
-  if (centroId) {
-    whereClause.centroId = centroId;
-  }
-
+// Função para buscar eventos por centro e ordenar por área de interesse e data
+const getEventsByCentro = async (centroId) => {
   const events = await Evento.findAll({
-    where: whereClause,
+    where: {
+      centroId: centroId
+    },
     include: [
       {
         model: Subarea,
@@ -85,9 +70,14 @@ const getEventsByAreasAndCentro = async (areaIds, centroId) => {
         attributes: ['id', 'nome'],
       }
     ],
+    order: [
+      [Subarea, 'nomeSubarea', 'ASC'],  // Ordena pela área de interesse (nome da subárea)
+      ['data', 'DESC']  // Ordena pela data, da mais recente para a mais antiga
+    ]
   });
   return events;
 };
+
 
 // Função para buscar um evento pelo ID
 const getEventById = async (id) => {
