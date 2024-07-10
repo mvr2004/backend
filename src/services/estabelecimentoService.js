@@ -120,39 +120,40 @@ const getEstablishmentsByName = async (name) => {
 
 const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
   try {
+    // Valida se areaIds foi fornecido
     if (!areaIds) {
       throw new Error('IDs de área não fornecidos');
     }
 
-    // Split areaIds if it's a string (comma-separated list)
+    // Converte areaIds para um array de números inteiros
     const areaIdsArray = typeof areaIds === 'string' ? areaIds.split(',').map(id => parseInt(id.trim())) : [areaIds];
 
-    // Validate if areaIdsArray contains valid integers
+    // Valida se todos os elementos de areaIdsArray são números inteiros válidos
     if (areaIdsArray.some(isNaN)) {
       throw new Error('IDs de área inválidos');
     }
 
-    // Find subareas that belong to the provided areas of interest
+    // Encontra as subáreas que pertencem às áreas de interesse fornecidas
     const subareas = await Subarea.findAll({
       where: {
         areaId: areaIdsArray
       }
     });
 
-    // Extract IDs of the found subareas
+    // Extrai os IDs das subáreas encontradas
     const subareaIds = subareas.map(subarea => subarea.id);
 
-    // Build the where clause for the establishment query
+    // Constrói a cláusula where para a consulta de estabelecimentos
     const whereClause = {
       subareaId: subareaIds
     };
 
-    // Add filter by centroId, if provided
+    // Adiciona filtro por centroId, se fornecido
     if (centroId) {
       whereClause.centroId = centroId;
     }
 
-    // Query establishments
+    // Consulta os estabelecimentos
     const establishments = await Estabelecimento.findAll({
       where: whereClause,
       include: [
@@ -173,9 +174,11 @@ const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
 
     return establishments;
   } catch (error) {
+    // Captura e relança o erro com uma mensagem específica
     throw new Error(`Erro ao buscar estabelecimentos por áreas de interesse e centro: ${error.message}`);
   }
 };
+
 
 // Função para buscar um estabelecimento pelo ID
 const getEstablishmentById = async (id) => {

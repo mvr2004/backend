@@ -51,6 +51,7 @@ const getEstablishmentsByAreasAndCentro = async (req, res, next) => {
 };
 
 
+
 // Controlador para buscar um estabelecimento pelo ID
 const getEstablishmentById = async (req, res, next) => {
   const { id } = req.params;
