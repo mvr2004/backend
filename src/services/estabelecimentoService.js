@@ -1,5 +1,3 @@
-// services/establishmentService.js
-
 const Estabelecimento = require('../models/Estabelecimento');
 const Subarea = require('../models/Subarea');
 const Area = require('../models/Area');
@@ -8,17 +6,6 @@ const upload = require('../config/uploadConfig');
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
-
-// Função para verificar se já existe um estabelecimento com o mesmo nome ou localização
-const checkExistingEstablishment = async (nome, localizacao) => {
-  const existingEstablishment = await Estabelecimento.findOne({
-    where: {
-      nome,
-      localizacao
-    }
-  });
-  return existingEstablishment;
-};
 
 // Função para verificar se já existe um estabelecimento com o mesmo nome ou localização
 const checkExistingEstablishment = async (nome, localizacao) => {
@@ -62,7 +49,6 @@ const createEstablishment = async (data) => {
   }
 };
 
-
 // Função para buscar todos os estabelecimentos
 const getAllEstablishments = async () => {
   const establishments = await Estabelecimento.findAll({
@@ -94,7 +80,7 @@ const getEstablishmentsByName = async (name) => {
   return establishments;
 };
 
-
+// Função para buscar estabelecimentos por áreas de interesse e centro
 const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
   try {
     // Encontra as subáreas que pertencem às áreas de interesse fornecidas
@@ -143,7 +129,6 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
   }
 };
 
-
 // Função para buscar um estabelecimento pelo ID
 const getEstablishmentById = async (id) => {
   const establishment = await Estabelecimento.findByPk(id, {
@@ -163,7 +148,7 @@ const getEstablishmentById = async (id) => {
 };
 
 module.exports = {
-checkExistingEstablishment,
+  checkExistingEstablishment,
   createEstablishment,
   getAllEstablishments,
   getEstablishmentsByName,
