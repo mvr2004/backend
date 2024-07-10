@@ -40,14 +40,14 @@ const getUsersByEvent = async (req, res, next) => {
 
 // Controlador para obter todos os eventos de um usuário
 const getEventsByUser = async (req, res, next) => {
-    try {
-        const { utilizadorId } = req.params;
-        const eventos = await participacaoService.getEventsByUser(utilizadorId);
-        res.json({ eventos });
-    } catch (error) {
-        console.error('Erro ao obter eventos do usuário:', error);
-        next(error);
-    }
+  try {
+    const { utilizadorId } = req.params;
+    const eventos = await participacaoService.getEventsByUser(utilizadorId);
+    res.json({ eventos });
+  } catch (error) {
+    console.error('Erro ao obter eventos do usuário:', error);
+    next(error);
+  }
 };
 
 module.exports = {
