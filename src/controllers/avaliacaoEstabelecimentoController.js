@@ -41,11 +41,15 @@ const createEstabelecimentoReview = async (req, res, next) => {
 const listEstabelecimentoReviews = async (req, res, next) => {
   const { establishmentId } = req.params;
   try {
+    console.log('Listing reviews for establishment:', establishmentId);
+
     // Busca todas as avaliações para o estabelecimento específico
     const reviews = await AvEstabelecimento.findAll({
       where: { establishmentId },
       include: [{ model: User, attributes: ['id', 'name'] }] // Inclui o nome do usuário na resposta
     });
+
+    console.log('Found reviews:', reviews);
 
     if (!reviews || reviews.length === 0) {
       return res.status(404).json({ error: 'Nenhuma avaliação encontrada para este estabelecimento.' });
@@ -58,24 +62,31 @@ const listEstabelecimentoReviews = async (req, res, next) => {
   }
 };
 
+
 const calculateEstabelecimentoAverageRating = async (req, res, next) => {
   const { establishmentId } = req.params;
   try {
-    // Calcula a média das avaliações para o estabelecimento específico
-    const averageRating = await AvEstabelecimento.aggregate('rating', 'avg', {
-      where: { establishmentId }
+    console.log('Calculating average rating for establishment:', establishmentId);
+
+    const averageRating = await AvEstabelecimento.findAll({
+      where: { establishmentId },
+      attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'averageRating']],
+      raw: true
     });
 
-    if (!averageRating) {
+    console.log('Calculated average rating:', averageRating);
+
+    if (!averageRating || averageRating.length === 0) {
       return res.status(404).json({ error: 'Nenhuma avaliação encontrada para este estabelecimento.' });
     }
 
-    res.json({ averageRating });
+    res.json({ averageRating: averageRating[0].averageRating });
   } catch (error) {
     console.error('Erro ao calcular média das avaliações de estabelecimento:', error);
     next(error);
   }
 };
+
 
 module.exports = {
   createEstabelecimentoReview,
