@@ -1,6 +1,4 @@
-// controllers/avaliacaoEstabelecimentoController.js
-
-const { sequelize } = require('../config/dbConfig');
+const { sequelize } = require('../config/dbConfig'); // Certifique-se de que o caminho está correto
 const User = require('../models/User');
 const Estabelecimento = require('../models/Estabelecimento');
 const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
@@ -37,7 +35,6 @@ const createEstabelecimentoReview = async (req, res, next) => {
   }
 };
 
-
 // Controlador para listar as avaliações de um estabelecimento
 const listEstabelecimentoReviews = async (req, res, next) => {
   const { establishmentId } = req.params;
@@ -62,7 +59,6 @@ const listEstabelecimentoReviews = async (req, res, next) => {
     next(error);
   }
 };
-
 
 const calculateEstabelecimentoAverageRating = async (req, res, next) => {
   const { establishmentId } = req.params;
