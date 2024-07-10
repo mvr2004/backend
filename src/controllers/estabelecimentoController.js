@@ -13,13 +13,11 @@ const createEstablishment = async (req, res, next) => {
     const { nome, localizacao, contacto, descricao, pago, subareaId, centroId } = req.body;
 
     // Verificação de campos obrigatórios
-
     if (!nome || !localizacao) {
       return res.status(400).json({ error: 'Nome e localização são obrigatórios.' });
     }
 
     // Verificação de estabelecimento existente
-
     const existingEstablishment = await estabelecimentoService.checkExistingEstablishment(nome, localizacao);
     if (existingEstablishment) {
       return res.status(400).json({ error: 'Já existe um estabelecimento com este nome ou localização.' });
@@ -45,7 +43,6 @@ const createEstablishment = async (req, res, next) => {
     }
 
     // Processamento da imagem
-
     let fotoUrl;
     if (req.file) {
       // Redimensionamento da imagem utilizando sharp
@@ -74,7 +71,6 @@ const createEstablishment = async (req, res, next) => {
     }
 
     // Criação do estabelecimento no banco de dados
-
     const establishment = await Estabelecimento.create({
       nome,
       localizacao,
@@ -87,13 +83,13 @@ const createEstablishment = async (req, res, next) => {
     });
 
     // Retorna o estabelecimento criado como resposta
-
     res.status(201).json({ establishment });
   } catch (error) {
     console.error('Erro ao criar o estabelecimento:', error);
     next(error); // Passa o erro para o próximo middleware de tratamento de erro
   }
 };
+
 
 
 // Controlador para buscar todos os estabelecimentos
