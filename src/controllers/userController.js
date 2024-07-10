@@ -250,49 +250,37 @@ exports.getUserAreas = async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId, {
+      include: {
+        model: Area,
+        through: { attributes: [] } // Isso garante que apenas os dados de `Area` sejam incluídos
+      }
+    });
+
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
 
-    const areas = await user.getAreas(); // Assume que existe um método 'getAreas' definido na relação muitos-para-muitos
-
-    res.json({ areas });
+    res.json({ areas: user.Areas });
   } catch (err) {
     console.error(`Erro ao buscar áreas do usuário: ${err.message}`);
     res.status(500).json({ message: `Erro ao buscar áreas do usuário: ${err.message}` });
   }
 };
 
-
-exports.getUserAreas = async (req, res) => {
-  const userId = req.params.userId;
-
-  try {
-    const userAreas = await UserArea.findAll({
-      where: { userId },
-      include: [Area]
-    });
-
-    const areas = userAreas.map(userArea => userArea.Area);
-
-    res.json({ areas });
-  } catch (err) {
-    console.error(`Erro ao buscar áreas do usuário: ${err.message}`);
-    res.status(500).json({ message: `Erro ao buscar áreas do usuário: ${err.message}` });
-  }
-};
 
 exports.updateUserAreas = async (req, res) => {
   const { userId, areaIds } = req.body;
 
   try {
-    // Remove todas as associações existentes do usuário
-    await UserArea.destroy({ where: { userId } });
+    const user = await User.findByPk(userId);
 
-    // Cria novas associações com as áreas selecionadas
-    const associations = areaIds.map(areaId => ({ userId, areaId }));
-    await UserArea.bulkCreate(associations);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    // Atualiza as associações do usuário com as áreas fornecidas
+    await user.setAreas(areaIds);
 
     res.status(200).json({ message: 'Áreas de interesse atualizadas com sucesso' });
   } catch (err) {
