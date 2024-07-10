@@ -118,33 +118,41 @@ const getEstablishmentsByName = async (name) => {
   return establishments;
 };
 
-// Função para buscar estabelecimentos por uma ou várias áreas de interesse e centro
 const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
   try {
-    // Converte areaIds para um array de números
-    const areaIdsArray = areaIds.split(',').map(id => parseInt(id.trim()));
+    if (!areaIds) {
+      throw new Error('IDs de área não fornecidos');
+    }
 
-    // Busca subáreas que pertencem às áreas de interesse fornecidas
+    // Split areaIds if it's a string (comma-separated list)
+    const areaIdsArray = typeof areaIds === 'string' ? areaIds.split(',').map(id => parseInt(id.trim())) : [areaIds];
+
+    // Validate if areaIdsArray contains valid integers
+    if (areaIdsArray.some(isNaN)) {
+      throw new Error('IDs de área inválidos');
+    }
+
+    // Find subareas that belong to the provided areas of interest
     const subareas = await Subarea.findAll({
       where: {
         areaId: areaIdsArray
       }
     });
 
-    // Extrai os IDs das subáreas encontradas
+    // Extract IDs of the found subareas
     const subareaIds = subareas.map(subarea => subarea.id);
 
-    // Monta a cláusula where para a consulta de estabelecimentos
+    // Build the where clause for the establishment query
     const whereClause = {
       subareaId: subareaIds
     };
 
-    // Adiciona o filtro por centroId, se fornecido
+    // Add filter by centroId, if provided
     if (centroId) {
       whereClause.centroId = centroId;
     }
 
-    // Realiza a consulta de estabelecimentos
+    // Query establishments
     const establishments = await Estabelecimento.findAll({
       where: whereClause,
       include: [
