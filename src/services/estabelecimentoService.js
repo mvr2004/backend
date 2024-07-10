@@ -20,72 +20,45 @@ const checkExistingEstablishment = async (nome, localizacao) => {
   return existingEstablishment;
 };
 
+// Função para verificar se já existe um estabelecimento com o mesmo nome ou localização
+const checkExistingEstablishment = async (nome, localizacao) => {
+  const existingEstablishment = await Estabelecimento.findOne({
+    where: {
+      nome,
+      localizacao
+    }
+  });
+  return existingEstablishment;
+};
+
 // Função para criar um novo estabelecimento com upload de fotografia
-const createEstablishment = async (req, res, next) => {
+const createEstablishment = async (data) => {
+  const {
+    nome,
+    localizacao,
+    contacto,
+    descricao,
+    pago,
+    subareaId,
+    centroId,
+    foto
+  } = data;
+
   try {
-    const { nome, localizacao, contacto, descricao, pago, subareaId, centroId } = req.body;
-
-    console.log('Dados recebidos:', req.body);
-
-    // Verifica se os campos 'nome' e 'localizacao' estão presentes e não vazios
-    if (!nome || !localizacao) {
-      console.log('Erro: Nome ou localização não fornecidos');
-      return res.status(400).json({ error: 'Nome e localização são obrigatórios.' });
-    }
-
-    const existingEstablishment = await checkExistingEstablishment(nome, localizacao);
-    if (existingEstablishment) {
-      return res.status(400).json({ error: 'Já existe um estabelecimento com este nome ou localização.' });
-    }
-
-    upload.single('foto')(req, res, async (err) => {
-      if (err) {
-        return res.status(400).json({ error: 'Erro ao enviar a imagem.' });
-      }
-
-      try {
-        if (!req.file) {
-          return res.status(400).json({ error: 'É necessário enviar uma imagem.' });
-        }
-
-        const resizedImage = await sharp(req.file.path)
-          .resize({ width: 300, height: 300 })
-          .toBuffer();
-
-        const filename = `${Date.now()}-${req.file.originalname}`;
-        const filepath = path.join(__dirname, '../public/uploads/', filename);
-
-        await sharp(resizedImage).toFile(filepath);
-        console.log(`Imagem salva em ${filepath}`);
-
-        fs.unlink(req.file.path, (err) => {
-          if (err) {
-            console.error('Erro ao remover o arquivo temporário:', err);
-          } else {
-            console.log('Arquivo temporário removido com sucesso');
-          }
-        });
-
-        const establishment = await Estabelecimento.create({
-          nome,
-          localizacao,
-          contacto,
-          descricao,
-          pago,
-          foto: `https://backend-9hij.onrender.com/uploads/${filename}`,
-          subareaId,
-          centroId
-        });
-
-        res.status(201).json({ establishment });
-      } catch (imageError) {
-        console.error('Erro ao processar a imagem:', imageError);
-        return res.status(400).json({ error: 'Imagem inválida.' });
-      }
+    const establishment = await Estabelecimento.create({
+      nome,
+      localizacao,
+      contacto,
+      descricao,
+      pago,
+      foto,
+      subareaId,
+      centroId
     });
+
+    return establishment;
   } catch (error) {
-    console.error('Erro ao criar o estabelecimento:', error);
-    next(error);
+    throw new Error(`Erro ao criar o estabelecimento: ${error.message}`);
   }
 };
 

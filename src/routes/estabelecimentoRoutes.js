@@ -7,7 +7,7 @@ const upload = require('../config/uploadConfig');
 
 
 // Rota para criar um estabelecimento
-router.post('/criarestab', estabelecimentoController.createEstablishment);
+router.post('/criarestab', upload.single('foto'), estabelecimentoController.createEstablishment);
 
 // Rota para buscar todos os estabelecimentos
 router.get('/list', estabelecimentoController.getAllEstablishments);
