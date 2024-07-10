@@ -158,10 +158,36 @@ const getEstablishmentById = async (req, res, next) => {
   }
 };
 
+onst createEstabelecimentoReview = async (req, res, next) => {
+  const { establishmentId, userId, rating } = req.body;
+
+  try {
+    // Verifique se o estabelecimento existe
+    const estabelecimento = await Estabelecimento.findByPk(establishmentId);
+
+    if (!estabelecimento) {
+      return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
+    }
+
+    // Cria a avaliação do estabelecimento
+    const review = await AvEstabelecimento.create({
+      establishmentId,
+      userId,
+      rating,
+    });
+
+    res.status(201).json({ review });
+  } catch (error) {
+    console.error('Erro ao criar avaliação de estabelecimento:', error);
+    next(error);
+  }
+};
+
 module.exports = {
   createEstablishment,
   getAllEstablishments,
   getEstablishmentsByName,
   getEstablishmentsByAreasAndCentro,
   getEstablishmentById,
+   createEstabelecimentoReview,
 };
