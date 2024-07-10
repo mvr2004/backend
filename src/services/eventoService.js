@@ -63,7 +63,7 @@ const getEventsByCentro = async (centroId) => {
       },
       {
         model: Utilizador,
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'email'],
       },
       {
         model: Centro,
