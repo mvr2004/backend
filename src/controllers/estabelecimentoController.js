@@ -12,15 +12,14 @@ const createEstablishment = async (req, res, next) => {
   try {
     const { nome, localizacao, contacto, descricao, pago, subareaId, centroId } = req.body;
 
-    console.log('Dados recebidos:', req.body);
+    // Verificação de campos obrigatórios
 
-    // Verifica se os campos 'nome' e 'localizacao' estão presentes e não vazios
     if (!nome || !localizacao) {
-      console.log('Erro: Nome ou localização não fornecidos');
       return res.status(400).json({ error: 'Nome e localização são obrigatórios.' });
     }
 
-    // Verifica se já existe um estabelecimento com o mesmo nome e localização
+    // Verificação de estabelecimento existente
+
     const existingEstablishment = await estabelecimentoService.checkExistingEstablishment(nome, localizacao);
     if (existingEstablishment) {
       return res.status(400).json({ error: 'Já existe um estabelecimento com este nome ou localização.' });
@@ -45,23 +44,24 @@ const createEstablishment = async (req, res, next) => {
       await uploadImage();
     }
 
-    // Verifica se foi enviada uma imagem
+    // Processamento da imagem
+
     let fotoUrl;
     if (req.file) {
-      // Redimensiona a imagem utilizando sharp
+      // Redimensionamento da imagem utilizando sharp
       const resizedImage = await sharp(req.file.path)
         .resize({ width: 300, height: 300 })
         .toBuffer();
 
-      // Define o nome do arquivo e o caminho onde será salvo
+      // Definição do nome do arquivo e caminho onde será salvo
       const filename = `${Date.now()}-${req.file.originalname}`;
       const filepath = path.join(__dirname, '../public/uploads/', filename);
 
-      // Salva a imagem redimensionada no sistema de arquivos
+      // Salvando a imagem redimensionada no sistema de arquivos
       await sharp(resizedImage).toFile(filepath);
       console.log(`Imagem salva em ${filepath}`);
 
-      // Remove o arquivo temporário enviado pelo cliente
+      // Removendo o arquivo temporário enviado pelo cliente
       fs.unlink(req.file.path, (err) => {
         if (err) {
           console.error('Erro ao remover o arquivo temporário:', err);
@@ -73,7 +73,8 @@ const createEstablishment = async (req, res, next) => {
       fotoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
     }
 
-    // Cria o novo estabelecimento no banco de dados
+    // Criação do estabelecimento no banco de dados
+
     const establishment = await Estabelecimento.create({
       nome,
       localizacao,
@@ -86,6 +87,7 @@ const createEstablishment = async (req, res, next) => {
     });
 
     // Retorna o estabelecimento criado como resposta
+
     res.status(201).json({ establishment });
   } catch (error) {
     console.error('Erro ao criar o estabelecimento:', error);
