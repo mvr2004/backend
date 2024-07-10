@@ -33,15 +33,15 @@ const createEstablishment = async (data) => {
 
   try {
     const establishment = await Estabelecimento.create({
-      nome,
-      localizacao,
-      contacto,
-      descricao,
-      pago,
-      foto,
-      subareaId,
-      centroId
-    });
+		  nome,
+		  localizacao,
+		  contacto,
+		  descricao,
+		  pago,
+		  foto: `https://backend-9hij.onrender.com/uploads/${filename}`,
+		  subareaId,
+		  centroId
+		});
 
     return establishment;
   } catch (error) {
