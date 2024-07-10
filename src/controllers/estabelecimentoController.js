@@ -165,7 +165,8 @@ const createEstabelecimentoReview = async (req, res, next) => {
   const { establishmentId, userId, rating } = req.body;
 
   try {
-    const estabelecimento = await Estabelecimento.findByPk(5);
+    console.log('Received data:', req.body);
+    const estabelecimento = await Estabelecimento.findByPk(establishmentId);
 
     if (!estabelecimento) {
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
@@ -183,6 +184,7 @@ const createEstabelecimentoReview = async (req, res, next) => {
     next(error);
   }
 };
+
 
 
 // Controlador para listar as avaliações de um estabelecimento
