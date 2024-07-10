@@ -7,7 +7,6 @@ const fs = require('fs');
 const path = require('path');
 const estabelecimentoService = require('../services/estabelecimentoService');
 
-// Função para criar um novo estabelecimento com upload de fotografia
 const createEstablishment = async (req, res, next) => {
   try {
     const { nome, localizacao, contacto, descricao, pago, subareaId, centroId } = req.body;
@@ -24,40 +23,34 @@ const createEstablishment = async (req, res, next) => {
     }
 
     // Middleware de upload de imagem
-    upload.single('foto')(req, res, async (err) => {
-      if (err) {
-        console.error('Erro ao enviar a imagem:', err);
-        return res.status(400).json({ error: 'Erro ao enviar a imagem.' });
-      }
-
+    if (req.file) {
       try {
+        console.log('Recebido arquivo:', req.file);
+        console.log('Caminho do arquivo:', req.file.path);
+
         // Processamento da imagem
-        let fotoUrl;
-        if (req.file) {
-          // Redimensionamento da imagem utilizando sharp
-          const resizedImage = await sharp(req.file.path)
-            .resize({ width: 300, height: 300 })
-            .toBuffer();
+        const resizedImage = await sharp(req.file.path)
+          .resize({ width: 300, height: 300 })
+          .toBuffer();
 
-          // Definição do nome do arquivo e caminho onde será salvo
-          const filename = `${Date.now()}-${req.file.originalname}`;
-          const filepath = path.join(__dirname, '../public/uploads/', filename);
+        const filename = `${Date.now()}-${req.file.originalname}`;
+        const filepath = path.join(__dirname, '../public/uploads/', filename);
 
-          // Salvando a imagem redimensionada no sistema de arquivos
-          await sharp(resizedImage).toFile(filepath);
-          console.log(`Imagem salva em ${filepath}`);
+        // Salvando a imagem redimensionada no sistema de arquivos
+        await sharp(resizedImage).toFile(filepath);
+        console.log(`Imagem salva em ${filepath}`);
 
-          // Removendo o arquivo temporário enviado pelo cliente
-          fs.unlink(req.file.path, (err) => {
-            if (err) {
-              console.error('Erro ao remover o arquivo temporário:', err);
-            } else {
-              console.log('Arquivo temporário removido com sucesso');
-            }
-          });
+        // Removendo o arquivo temporário enviado pelo cliente
+        fs.unlink(req.file.path, (err) => {
+          if (err) {
+            console.error('Erro ao remover o arquivo temporário:', err);
+          } else {
+            console.log('Arquivo temporário removido com sucesso');
+          }
+        });
 
-          fotoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
-        }
+        // URL da imagem para salvar no banco de dados
+        const fotoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
 
         // Criação do estabelecimento no banco de dados
         const establishment = await Estabelecimento.create({
@@ -66,7 +59,7 @@ const createEstablishment = async (req, res, next) => {
           contacto,
           descricao,
           pago,
-          foto: fotoUrl, // Salva a URL da foto no banco de dados
+          foto: fotoUrl,
           subareaId,
           centroId
         });
@@ -74,10 +67,24 @@ const createEstablishment = async (req, res, next) => {
         // Retorna o estabelecimento criado como resposta
         res.status(201).json({ establishment });
       } catch (error) {
-        console.error('Erro ao criar o estabelecimento:', error);
-        return res.status(500).json({ error: 'Erro interno ao criar o estabelecimento.' });
+        console.error('Erro ao processar a imagem:', error);
+        return res.status(400).json({ error: 'Erro ao processar a imagem.' });
       }
-    });
+    } else {
+      // Se não houver arquivo, cria o estabelecimento sem imagem
+      const establishment = await Estabelecimento.create({
+        nome,
+        localizacao,
+        contacto,
+        descricao,
+        pago,
+        subareaId,
+        centroId
+      });
+
+      // Retorna o estabelecimento criado como resposta
+      res.status(201).json({ establishment });
+    }
 
   } catch (error) {
     console.error('Erro ao criar o estabelecimento:', error);
