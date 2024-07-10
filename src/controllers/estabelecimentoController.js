@@ -1,6 +1,6 @@
 // controllers/establishmentController.js
 
-const AvEstabelecimento = require('../models/AvEstabelecimento');
+const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
 const Estabelecimento = require('../models/Estabelecimento');
 const upload = require('../config/uploadConfig');
 const sharp = require('sharp');
