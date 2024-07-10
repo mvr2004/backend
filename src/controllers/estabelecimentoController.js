@@ -165,7 +165,7 @@ const createEstabelecimentoReview = async (req, res, next) => {
   const { establishmentId, userId, rating } = req.body;
 
   try {
-    const estabelecimento = await Estabelecimento.findByPk(establishmentId);
+    const estabelecimento = await Estabelecimento.findByPk(5);
 
     if (!estabelecimento) {
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
