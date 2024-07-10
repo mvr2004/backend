@@ -56,17 +56,18 @@ const getUsersByEvent = async (eventoId) => {
 const getEventsByUser = async (utilizadorId) => {
     try {
         const eventos = await Evento.findAll({
-            include: [{
+            include: {
                 model: Utilizador,
                 where: { id: utilizadorId },
                 through: { attributes: [] }
-            }]
+            }
         });
         return eventos;
     } catch (error) {
         throw new Error('Erro ao obter eventos do usuário: ' + error.message);
     }
 };
+
 
 module.exports = {
     addUserToEvent,

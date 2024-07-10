@@ -9,4 +9,5 @@ router.post('/remove', participacaoController.removeUserFromEvent);
 router.get('/event/:eventoId/users', participacaoController.getUsersByEvent);
 router.get('/user/:utilizadorId/events', participacaoController.getEventsByUser);
 
+
 module.exports = router;
