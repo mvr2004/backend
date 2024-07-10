@@ -1,7 +1,7 @@
 // models/Evento.js
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/dbConfig');
+const { sequelize } = require('../config/dbConfig'); 
 const Subarea = require('./Subarea');
 const Utilizador = require('./User');
 const Centro = require('./Centro');

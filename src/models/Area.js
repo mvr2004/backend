@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/dbConfig');
+const { sequelize } = require('../config/dbConfig'); 
 
 // Definindo o modelo Area
 const Area = sequelize.define('Area', {
