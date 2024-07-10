@@ -55,7 +55,7 @@ const getEstablishmentsByAreasAndCentro = async (req, res, next) => {
     const establishments = await establishmentService.getEstablishmentsByAreasAndCentro(areaIdsArray, centroId);
     res.json({ establishments });
   } catch (error) {
-    console.error('Erro ao buscar estabelecimentos por áreas de interesse e centro:', error);
+    console.error('Erro ao buscar estabelecimentos por áreas de interesse e centro:', error.message);
     next(error);
   }
 };
