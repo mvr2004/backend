@@ -160,15 +160,16 @@ const getEstablishmentById = async (req, res, next) => {
 };
 
 // controllers/avaliacaoEstabelecimentoController.js
-
 const createEstabelecimentoReview = async (req, res, next) => {
   const { establishmentId, userId, rating } = req.body;
-console.log('A cruar review');
+
+  console.log('Creating review for establishmentId:', establishmentId); // Add this line
+
   try {
-    console.log('Received data:', req.body);
     const estabelecimento = await Estabelecimento.findByPk(establishmentId);
 
     if (!estabelecimento) {
+      console.log('Establishment not found with ID:', establishmentId); // Add this line
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
