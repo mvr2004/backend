@@ -1,5 +1,6 @@
 // controllers/establishmentController.js
 
+const AvEstabelecimento = require('../models/AvEstabelecimento');
 const Estabelecimento = require('../models/Estabelecimento');
 const upload = require('../config/uploadConfig');
 const sharp = require('sharp');
@@ -158,11 +159,12 @@ const getEstablishmentById = async (req, res, next) => {
   }
 };
 
-onst createEstabelecimentoReview = async (req, res, next) => {
+// Controlador para criar uma avaliação de estabelecimento
+const createEstabelecimentoReview = async (req, res, next) => {
   const { establishmentId, userId, rating } = req.body;
 
   try {
-    // Verifique se o estabelecimento existe
+    // Verifica se o estabelecimento existe
     const estabelecimento = await Estabelecimento.findByPk(establishmentId);
 
     if (!estabelecimento) {
@@ -179,6 +181,39 @@ onst createEstabelecimentoReview = async (req, res, next) => {
     res.status(201).json({ review });
   } catch (error) {
     console.error('Erro ao criar avaliação de estabelecimento:', error);
+    next(error);
+  }
+};
+
+// Controlador para listar as avaliações de um estabelecimento
+const listEstabelecimentoReviews = async (req, res, next) => {
+  const { estabelecimentoId } = req.params;
+
+  try {
+    const reviews = await AvEstabelecimento.findAll({
+      where: { establishmentId: estabelecimentoId },
+    });
+
+    res.json({ reviews });
+  } catch (error) {
+    console.error('Erro ao listar avaliações de estabelecimento:', error);
+    next(error);
+  }
+};
+
+// Controlador para calcular a média das avaliações de um estabelecimento
+const calculateEstabelecimentoAverageRating = async (req, res, next) => {
+  const { estabelecimentoId } = req.params;
+
+  try {
+    const averageRating = await AvEstabelecimento.findOne({
+      attributes: [[sequelize.fn('avg', sequelize.col('rating')), 'avgRating']],
+      where: { establishmentId: estabelecimentoId },
+    });
+
+    res.json({ averageRating });
+  } catch (error) {
+    console.error('Erro ao calcular média das avaliações de estabelecimento:', error);
     next(error);
   }
 };
