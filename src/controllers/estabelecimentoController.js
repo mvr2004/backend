@@ -159,16 +159,17 @@ const getEstablishmentById = async (req, res, next) => {
   }
 };
 
-// Controlador para criar uma avaliação de estabelecimento
-const createEstabelecimentoReview = async (data) => {
-  const { establishmentId, userId, rating } = data;
+// controllers/avaliacaoEstabelecimentoController.js
+
+const createEstabelecimentoReview = async (req, res, next) => {
+  const { establishmentId, userId, rating } = req.body; // Certifique-se de estar recebendo os dados do corpo da requisição
 
   try {
     // Verifica se o estabelecimento existe
     const estabelecimento = await Estabelecimento.findByPk(establishmentId);
 
     if (!estabelecimento) {
-      throw new Error('Estabelecimento não encontrado.');
+      return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
     // Cria a avaliação do estabelecimento
@@ -178,11 +179,13 @@ const createEstabelecimentoReview = async (data) => {
       rating,
     });
 
-    return review;
+    res.status(201).json({ review });
   } catch (error) {
-    throw new Error(`Erro ao criar avaliação de estabelecimento: ${error.message}`);
+    console.error('Erro ao criar avaliação de estabelecimento:', error);
+    next(error);
   }
 };
+
 
 
 // Controlador para listar as avaliações de um estabelecimento
