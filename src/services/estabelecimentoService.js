@@ -25,13 +25,15 @@ const createEstablishment = async (req, res, next) => {
   try {
     const { nome, localizacao, contacto, descricao, pago, subareaId, centroId } = req.body;
 
-    // Verifica se já existe um estabelecimento com o mesmo nome ou localização
+    if (!nome || !localizacao) {
+      return res.status(400).json({ error: 'Nome e localização são obrigatórios.' });
+    }
+
     const existingEstablishment = await checkExistingEstablishment(nome, localizacao);
     if (existingEstablishment) {
       return res.status(400).json({ error: 'Já existe um estabelecimento com este nome ou localização.' });
     }
 
-    // Configuração do upload de fotografia utilizando multer e sharp
     upload.single('foto')(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: 'Erro ao enviar a imagem.' });
@@ -42,7 +44,6 @@ const createEstablishment = async (req, res, next) => {
           return res.status(400).json({ error: 'É necessário enviar uma imagem.' });
         }
 
-        // Processamento da imagem com sharp
         const resizedImage = await sharp(req.file.path)
           .resize({ width: 300, height: 300 })
           .toBuffer();
@@ -50,11 +51,9 @@ const createEstablishment = async (req, res, next) => {
         const filename = `${Date.now()}-${req.file.originalname}`;
         const filepath = path.join(__dirname, '../public/uploads/', filename);
 
-        // Salva a imagem redimensionada
         await sharp(resizedImage).toFile(filepath);
         console.log(`Imagem salva em ${filepath}`);
 
-        // Remove o arquivo temporário
         fs.unlink(req.file.path, (err) => {
           if (err) {
             console.error('Erro ao remover o arquivo temporário:', err);
@@ -63,14 +62,13 @@ const createEstablishment = async (req, res, next) => {
           }
         });
 
-        // Cria o estabelecimento no banco de dados
         const establishment = await Estabelecimento.create({
           nome,
           localizacao,
           contacto,
           descricao,
           pago,
-          foto: `https://backend-9hij.onrender.com/uploads/${filename}`, // URL pública da imagem
+          foto: `https://backend-9hij.onrender.com/uploads/${filename}`,
           subareaId,
           centroId
         });
@@ -86,6 +84,7 @@ const createEstablishment = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // Função para buscar todos os estabelecimentos
 const getAllEstablishments = async () => {
