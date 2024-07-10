@@ -163,7 +163,7 @@ const getEstablishmentById = async (req, res, next) => {
 
 const createEstabelecimentoReview = async (req, res, next) => {
   const { establishmentId, userId, rating } = req.body;
-
+console.log('A cruar review');
   try {
     console.log('Received data:', req.body);
     const estabelecimento = await Estabelecimento.findByPk(establishmentId);
