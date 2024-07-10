@@ -1,6 +1,7 @@
 // src/routes/estabelecimentoRoutes.js
 const express = require('express');
 const estabelecimentoController = require('../controllers/estabelecimentoController'); 
+const avaliacaoEstabelecimentoController = require('../controllers/avaliacaoEstabelecimentoController');
 const router = express.Router();
 const upload = require('../config/uploadConfig');
 
@@ -23,13 +24,13 @@ router.get('/estab/:id', estabelecimentoController.getEstablishmentById);
 
 
 // Rota para criar uma avaliação de estabelecimento
-router.post('/avaliacao', estabelecimentoController.createEstabelecimentoReview);
+router.post('/avaliacao', avaliacaoEstabelecimentoController.createEstabelecimentoReview);
 
 // Rota para listar as avaliações de um estabelecimento
-router.get('/avaliacao/:estabelecimentoId', estabelecimentoController.listEstabelecimentoReviews);
+router.get('/avaliacao/:estabelecimentoId', avaliacaoEstabelecimentoController.listEstabelecimentoReviews);
 
 // Rota para calcular a média das avaliações de um estabelecimento
-router.get('/avaliacao/media/:estabelecimentoId', estabelecimentoController.calculateEstabelecimentoAverageRating);
+router.get('/avaliacao/media/:estabelecimentoId', avaliacaoEstabelecimentoController.calculateEstabelecimentoAverageRating);
 
 
 

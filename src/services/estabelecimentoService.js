@@ -147,56 +147,7 @@ const getEstablishmentById = async (id) => {
   return establishment;
 };
 
-
-// Função para criar uma avaliação de estabelecimento
-const createEstabelecimentoReview = async (data) => {
-  const { establishmentId, userId, rating } = data;
-
-  try {
-    // Fetch the establishment by ID
-    const estabelecimento = await Estabelecimento.findByPk(establishmentId);
-
-    if (!estabelecimento) {
-      throw new Error('Estabelecimento não encontrado.');
-    }
-
-    // Create the review
-    const review = await AvEstabelecimento.create({
-      establishmentId,
-      userId,
-      rating,
-    });
-
-    return review;
-  } catch (error) {
-    throw new Error(`Erro ao criar avaliação de estabelecimento: ${error.message}`);
-  }
-};
-
-// Função para listar as avaliações de um estabelecimento
-const listEstabelecimentoReviews = async (estabelecimentoId) => {
-  const reviews = await AvEstabelecimento.findAll({
-    where: { establishmentId: estabelecimentoId },
-  });
-
-  return reviews;
-};
-
-// Função para calcular a média das avaliações de um estabelecimento
-const calculateEstabelecimentoAverageRating = async (estabelecimentoId) => {
-  const averageRating = await AvEstabelecimento.findOne({
-    attributes: [[sequelize.fn('avg', sequelize.col('rating')), 'avgRating']],
-    where: { establishmentId: estabelecimentoId },
-  });
-
-  return averageRating;
-};
-
-
 module.exports = {
- createEstabelecimentoReview,
-  listEstabelecimentoReviews,
-  calculateEstabelecimentoAverageRating,
   checkExistingEstablishment,
   createEstablishment,
   getAllEstablishments,

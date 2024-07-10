@@ -1,6 +1,5 @@
 // controllers/establishmentController.js
 
-const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
 const Estabelecimento = require('../models/Estabelecimento');
 const upload = require('../config/uploadConfig');
 const sharp = require('sharp');
@@ -159,84 +158,10 @@ const getEstablishmentById = async (req, res, next) => {
   }
 };
 
-
-// Create a review for an establishment
-const createEstabelecimentoReview = async (req, res, next) => {
-  const { establishmentId, userId, rating } = req.body;
-
-  console.log('Creating review for establishmentId:', establishmentId); // Add this line
-
-  try {
-    // Fetch the establishment by ID
-    const estabelecimento = await Estabelecimento.findByPk(establishmentId);
-
-    if (!estabelecimento) {
-      console.log('Establishment not found with ID:', establishmentId); // Add this line
-      return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
-    }
-
-    // Check if user exists (assuming you have a User model and want to verify the user as well)
-    const user = await User.findByPk(userId);
-    if (!user) {
-      console.log('User not found with ID:', userId); // Add this line
-      return res.status(404).json({ error: 'Usuário não encontrado.' });
-    }
-
-    // Create the review
-    const review = await AvEstabelecimento.create({
-      establishmentId,
-      userId,
-      rating,
-    });
-
-    res.status(201).json({ review });
-  } catch (error) {
-    console.error('Erro ao criar avaliação de estabelecimento:', error);
-    next(error);
-  }
-};
-
-
-// Controlador para listar as avaliações de um estabelecimento
-const listEstabelecimentoReviews = async (req, res, next) => {
-  const { estabelecimentoId } = req.params;
-
-  try {
-    const reviews = await AvEstabelecimento.findAll({
-      where: { establishmentId: estabelecimentoId },
-    });
-
-    res.json({ reviews });
-  } catch (error) {
-    console.error('Erro ao listar avaliações de estabelecimento:', error);
-    next(error);
-  }
-};
-
-// Controlador para calcular a média das avaliações de um estabelecimento
-const calculateEstabelecimentoAverageRating = async (req, res, next) => {
-  const { estabelecimentoId } = req.params;
-
-  try {
-    const averageRating = await AvEstabelecimento.findOne({
-      attributes: [[sequelize.fn('avg', sequelize.col('rating')), 'avgRating']],
-      where: { establishmentId: estabelecimentoId },
-    });
-
-    res.json({ averageRating });
-  } catch (error) {
-    console.error('Erro ao calcular média das avaliações de estabelecimento:', error);
-    next(error);
-  }
-};
-
 module.exports = {
   createEstablishment,
   getAllEstablishments,
   getEstablishmentsByName,
   getEstablishmentsByAreasAndCentro,
   getEstablishmentById,
-   createEstabelecimentoReview,
-   listEstabelecimentoReviews,
-   calculateEstabelecimentoAverageRating,
 };
