@@ -23,11 +23,13 @@ const getAllEvents = async (req, res, next) => {
   }
 };
 
-// Controlador para buscar eventos por centro e ordenar por área de interesse e data
+// Controlador para buscar eventos por centro e ordenar por área de interesse do utilizador e data
 const getEventsByCentro = async (req, res, next) => {
   const { centroId } = req.query;
+  const userId = req.user.id; 
+
   try {
-    const events = await eventService.getEventsByCentro(centroId);
+    const events = await eventService.getEventsByCentro(centroId, userId);
     res.json({ events });
   } catch (error) {
     console.error('Erro ao buscar eventos por centro:', error);
