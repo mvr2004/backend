@@ -23,14 +23,14 @@ const getAllEvents = async (req, res, next) => {
   }
 };
 
-// Controlador para buscar eventos por uma ou várias áreas de interesse e centro
-const getEventsByAreasAndCentro = async (req, res, next) => {
-  const { areaIds, centroId } = req.query;
+// Controlador para buscar eventos por centro e ordenar por área de interesse e data
+const getEventsByCentro = async (req, res, next) => {
+  const { centroId } = req.query;
   try {
-    const events = await eventService.getEventsByAreasAndCentro(areaIds, centroId);
+    const events = await eventService.getEventsByCentro(centroId);
     res.json({ events });
   } catch (error) {
-    console.error('Erro ao buscar eventos por áreas de interesse e centro:', error);
+    console.error('Erro ao buscar eventos por centro:', error);
     next(error);
   }
 };
@@ -53,6 +53,6 @@ const getEventById = async (req, res, next) => {
 module.exports = {
   createEvent,
   getAllEvents,
-  getEventsByAreasAndCentro,
+  getEventsByCentro,
   getEventById,
 };

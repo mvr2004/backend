@@ -78,7 +78,6 @@ const getEventsByCentro = async (centroId) => {
   return events;
 };
 
-
 // Função para buscar um evento pelo ID
 const getEventById = async (id) => {
   const event = await Evento.findByPk(id, {
@@ -103,6 +102,6 @@ const getEventById = async (id) => {
 module.exports = {
   createEvent,
   getAllEvents,
-  getEventsByAreasAndCentro,
+  getEventsByCentro,
   getEventById,
 };
