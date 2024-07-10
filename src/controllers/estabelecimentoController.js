@@ -175,6 +175,13 @@ const createEstabelecimentoReview = async (req, res, next) => {
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
+    // Check if user exists (assuming you have a User model and want to verify the user as well)
+    const user = await User.findByPk(userId);
+    if (!user) {
+      console.log('User not found with ID:', userId); // Add this line
+      return res.status(404).json({ error: 'Usuário não encontrado.' });
+    }
+
     // Create the review
     const review = await AvEstabelecimento.create({
       establishmentId,
@@ -188,7 +195,6 @@ const createEstabelecimentoReview = async (req, res, next) => {
     next(error);
   }
 };
-
 
 
 // Controlador para listar as avaliações de um estabelecimento
@@ -231,4 +237,6 @@ module.exports = {
   getEstablishmentsByAreasAndCentro,
   getEstablishmentById,
    createEstabelecimentoReview,
+   listEstabelecimentoReviews,
+   calculateEstabelecimentoAverageRating,
 };
