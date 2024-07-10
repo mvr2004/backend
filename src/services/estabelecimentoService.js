@@ -118,15 +118,16 @@ const getEstablishmentsByName = async (name) => {
   return establishments;
 };
 
+
 const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
   try {
-    // Valida se areaIds foi fornecido
-    if (!areaIds) {
-      throw new Error('IDs de área não fornecidos');
+    // Valida se areaIds foi fornecido e é uma string não vazia
+    if (!areaIds || typeof areaIds !== 'string' || areaIds.trim() === '') {
+      throw new Error('IDs de área não fornecidos ou inválidos');
     }
 
     // Converte areaIds para um array de números inteiros
-    const areaIdsArray = typeof areaIds === 'string' ? areaIds.split(',').map(id => parseInt(id.trim())) : [areaIds];
+    const areaIdsArray = areaIds.split(',').map(id => parseInt(id.trim(), 10));
 
     // Valida se todos os elementos de areaIdsArray são números inteiros válidos
     if (areaIdsArray.some(isNaN)) {
@@ -178,6 +179,7 @@ const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
     throw new Error(`Erro ao buscar estabelecimentos por áreas de interesse e centro: ${error.message}`);
   }
 };
+
 
 
 // Função para buscar um estabelecimento pelo ID
