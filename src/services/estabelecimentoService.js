@@ -163,6 +163,7 @@ const getEstablishmentById = async (id) => {
 };
 
 module.exports = {
+checkExistingEstablishment,
   createEstablishment,
   getAllEstablishments,
   getEstablishmentsByName,
