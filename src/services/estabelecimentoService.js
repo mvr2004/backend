@@ -95,7 +95,7 @@ const getAllEstablishments = async () => {
       attributes: ['id', 'nomeSubarea'],
     }, {
       model: Centro,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'centro'],
     }],
   });
   return establishments;
@@ -112,7 +112,7 @@ const getEstablishmentsByName = async (name) => {
       attributes: ['id', 'nomeSubarea'],
     }, {
       model: Centro,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'centro'],
     }],
   });
   return establishments;
@@ -148,7 +148,7 @@ const getEstablishmentsByAreasAndCentro = async (areaIds, centroId) => {
       },
     }, {
       model: Centro,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'centro'],
     }],
   });
   return establishments;
@@ -166,7 +166,7 @@ const getEstablishmentById = async (id) => {
       },
     }, {
       model: Centro,
-      attributes: ['id', 'nome'],
+      attributes: ['id', 'centro'],
     }],
   });
   return establishment;

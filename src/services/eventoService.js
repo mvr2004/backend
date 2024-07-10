@@ -39,11 +39,11 @@ const getAllEvents = async () => {
       },
       {
         model: Utilizador,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'name'],
       },
       {
         model: Centro,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'centro'],
       }
     ],
   });
@@ -63,11 +63,11 @@ const getEventsByCentro = async (centroId) => {
       },
       {
         model: Utilizador,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'name'],
       },
       {
         model: Centro,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'centro'],
       }
     ],
     order: [
@@ -88,11 +88,11 @@ const getEventById = async (id) => {
       },
       {
         model: Utilizador,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'name'],
       },
       {
         model: Centro,
-        attributes: ['id', 'nome'],
+        attributes: ['id', 'centro'],
       }
     ],
   });
