@@ -7,12 +7,20 @@ const Evento = require('../models/Evento');
 // Função para adicionar um usuário a um evento
 const addUserToEvent = async (utilizadorId, eventoId) => {
     try {
+        // Verifica se o usuário existe
+        const user = await Utilizador.findByPk(utilizadorId);
+        if (!user) {
+            throw new Error('Usuário não encontrado com o ID fornecido.');
+        }
+
+        // Cria a participação no evento
         const participacao = await ParticipacaoEvento.create({ utilizadorId, eventoId });
         return participacao;
     } catch (error) {
         throw new Error('Erro ao adicionar usuário ao evento: ' + error.message);
     }
 };
+
 
 // Função para remover um usuário de um evento
 const removeUserFromEvent = async (utilizadorId, eventoId) => {
