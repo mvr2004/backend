@@ -17,9 +17,11 @@ const createEvent = async (req, res, next) => {
       return res.status(400).json({ error: 'Utilizador não encontrado.' });
     }
 
-    // Format date and time using moment
+    // Format date using moment
     const formattedDate = moment(data, 'YYYY-MM-DD').toDate();  // Formata a data para 'YYYY-MM-DD'
-    const formattedTime = moment(hora, 'HH:mm').toDate();      // Formata a hora para 'HH:mm'
+
+    // Format time to HH:mm format
+    const formattedTime = moment(hora, 'HH:mm').format('HH:mm');  // Formata a hora para 'HH:mm'
 
     // Cria o evento no banco de dados
     const event = await Evento.create({
