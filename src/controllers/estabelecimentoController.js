@@ -134,7 +134,26 @@ const getEstablishmentsByAreasAndCentro = async (req, res, next) => {
     }
 
     const establishments = await estabelecimentoService.getEstablishmentsByAreasAndCentro(areaIdsArray, centroId);
-    res.json({ establishments });
+
+    // Formata a resposta para incluir a média das avaliações
+    const response = establishments.map(establishment => {
+      return {
+        id: establishment.id,
+        nome: establishment.nome,
+        localizacao: establishment.localizacao,
+        contacto: establishment.contacto,
+        descricao: establishment.descricao,
+        pago: establishment.pago,
+        foto: establishment.foto,
+        subareaId: establishment.subareaId,
+        centroId: establishment.centroId,
+        Subarea: establishment.Subarea,
+        Centro: establishment.Centro,
+        averageRating: parseFloat(establishment.averageRating) || 0 // Adiciona a média das avaliações
+      };
+    });
+
+    res.json({ establishments: response });
   } catch (error) {
     console.error('Erro ao buscar estabelecimentos por áreas de interesse e centro:', error.message);
     next(error);

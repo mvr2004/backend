@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Estabelecimento = require('../models/Estabelecimento');
 const Subarea = require('../models/Subarea');
 const Area = require('../models/Area');
@@ -80,7 +81,6 @@ const getEstablishmentsByName = async (name) => {
   return establishments;
 };
 
-// Função para buscar estabelecimentos por áreas de interesse e centro
 // Função para buscar estabelecimentos por áreas de interesse e centro com média de avaliações
 const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
   try {
@@ -96,7 +96,9 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
 
     // Constrói a cláusula where para a consulta de estabelecimentos
     const whereClause = {
-      subareaId: subareaIds
+      subareaId: {
+        [Op.in]: subareaIds
+      }
     };
 
     // Adiciona filtro por centroId, se fornecido
@@ -104,7 +106,7 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
       whereClause.centroId = centroId;
     }
 
-    // Consulta os estabelecimentos
+    // Consulta os estabelecimentos com média das avaliações
     const establishments = await Estabelecimento.findAll({
       where: whereClause,
       include: [
@@ -122,11 +124,16 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
         },
         {
           model: AvEstabelecimento,
-          attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'averageRating']],
-          raw: true
-        }
+          attributes: [],
+        },
       ],
-      group: ['Estabelecimento.id', 'Subarea.id', 'Subarea.Area.id', 'Centro.id']
+      attributes: {
+        include: [
+          [sequelize.fn('AVG', sequelize.col('AvEstabelecimentos.rating')), 'averageRating']
+        ]
+      },
+      group: ['Estabelecimento.id', 'Subarea.id', 'Subarea.Area.id', 'Centro.id'],
+      raw: true
     });
 
     return establishments;
