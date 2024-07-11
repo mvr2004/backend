@@ -5,42 +5,12 @@ const eventService = require('../services/eventoService');
 // Controlador para criar um novo evento
 const createEvent = async (req, res, next) => {
   try {
-    const { nome, localizacao, data, hora, descricao, subareaId, utilizadorId, centroId } = req.body;
-
-    // Definindo formatos aceitos
-    const dateFormats = ['YYYY-MM-DD', 'DD/MM/YYYY', 'MM-DD-YYYY'];
-
-    // Validar e converter a data
-    let validDate = null;
-    for (const format of dateFormats) {
-      if (moment(data, format, true).isValid()) {
-        validDate = moment(data, format).format('YYYY-MM-DD');
-        break;
-      }
-    }
-
-    if (!validDate) {
-      return res.status(400).json({ error: 'Invalid date format. Accepted formats: YYYY-MM-DD, DD/MM/YYYY, MM-DD-YYYY' });
-    }
-
-    const eventData = {
-      nome,
-      localizacao,
-      data: validDate,
-      hora,
-      descricao,
-      subareaId,
-      utilizadorId,
-      centroId
-    };
-
-    await eventService.createEvent(eventData, res, next);
+    await eventService.createEvent(req, res, next);
   } catch (error) {
     console.error('Erro no controlador de evento:', error);
     next(error);
   }
 };
-
 
 // Controlador para buscar todos os eventos
 const getAllEvents = async (req, res, next) => {
