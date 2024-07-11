@@ -3,6 +3,7 @@ const Estabelecimento = require('../models/Estabelecimento');
 const Subarea = require('../models/Subarea');
 const Area = require('../models/Area');
 const Centro = require('../models/Centro');
+const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
 const upload = require('../config/uploadConfig');
 const sharp = require('sharp');
 const fs = require('fs');
