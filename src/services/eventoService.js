@@ -10,7 +10,25 @@ const createEvent = async (req, res, next) => {
   try {
     const { nome, localizacao, data, hora, descricao, subareaId, utilizadorId, centroId } = req.body;
 
-    // Cria o evento no banco de dados
+    // Check if the user exists
+    const userExists = await Utilizador.findByPk(utilizadorId);
+    if (!userExists) {
+      return res.status(400).json({ error: 'Utilizador não encontrado.' });
+    }
+
+    // Check if the subarea exists
+    const subareaExists = await Subarea.findByPk(subareaId);
+    if (!subareaExists) {
+      return res.status(400).json({ error: 'Subarea não encontrada.' });
+    }
+
+    // Check if the centro exists
+    const centroExists = await Centro.findByPk(centroId);
+    if (!centroExists) {
+      return res.status(400).json({ error: 'Centro não encontrado.' });
+    }
+
+    // Create the event in the database
     const event = await Evento.create({
       nome,
       localizacao,
