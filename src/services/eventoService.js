@@ -18,8 +18,8 @@ const createEvent = async (req, res, next) => {
     }
 
     // Format date and time using moment
-    const formattedDate = moment(data, 'YYYY-MM-DD').toDate();
-    const formattedTime = moment(hora, 'HH:mm:ss').toDate();
+    const formattedDate = moment(data, 'YYYY-MM-DD').toDate();  // Formata a data para 'YYYY-MM-DD'
+    const formattedTime = moment(hora, 'HH:mm').toDate();      // Formata a hora para 'HH:mm'
 
     // Cria o evento no banco de dados
     const event = await Evento.create({
@@ -35,7 +35,7 @@ const createEvent = async (req, res, next) => {
 
     res.status(201).json({ event });
   } catch (error) {
-    console.error('Erro no controlador de evento:', error);
+    console.error('Erro no serviço de evento:', error);
     next(error);
   }
 };
