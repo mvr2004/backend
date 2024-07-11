@@ -1,5 +1,5 @@
 // src/controllers/avaliacaoEstabelecimentoController.js
-const { sequelize } = require('../config/dbConfig'); // Certifique-se de que o caminho está correto
+const sequelize = require('../config/dbConfig');
 const User = require('../models/User');
 const Estabelecimento = require('../models/Estabelecimento');
 const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
