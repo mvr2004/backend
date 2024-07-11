@@ -54,7 +54,7 @@ const Evento = sequelize.define('Evento', {
         }
     }
 }, {
-    timestamps: false
+    timestamps: true
 });
 
 Subarea.hasMany(Evento, { foreignKey: 'subareaId' });
