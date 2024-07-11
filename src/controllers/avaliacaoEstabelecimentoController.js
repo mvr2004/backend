@@ -4,7 +4,7 @@ const User = require('../models/User');
 const Estabelecimento = require('../models/Estabelecimento');
 const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
 
-// Controlador para criar uma nova avaliação de estabelecimento
+// Controlador para criar ou atualizar uma avaliação de estabelecimento
 const createEstabelecimentoReview = async (req, res, next) => {
   try {
     const { userId, establishmentId, rating } = req.body;
@@ -22,16 +22,27 @@ const createEstabelecimentoReview = async (req, res, next) => {
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
-    // Cria a avaliação de estabelecimento
-    const review = await AvEstabelecimento.create({
-      userId,
-      establishmentId,
-      rating
+    // Verifica se já existe uma avaliação para o par userId e establishmentId
+    const existingReview = await AvEstabelecimento.findOne({
+      where: { userId, establishmentId }
     });
 
-    res.status(201).json({ review });
+    if (existingReview) {
+      // Atualiza a avaliação existente
+      existingReview.rating = rating;
+      await existingReview.save();
+      res.status(200).json({ review: existingReview });
+    } else {
+      // Cria uma nova avaliação de estabelecimento
+      const review = await AvEstabelecimento.create({
+        userId,
+        establishmentId,
+        rating
+      });
+      res.status(201).json({ review });
+    }
   } catch (error) {
-    console.error('Erro ao criar avaliação de estabelecimento:', error);
+    console.error('Erro ao criar ou atualizar avaliação de estabelecimento:', error);
     next(error);
   }
 };
@@ -91,10 +102,8 @@ const calculateEstabelecimentoAverageRating = async (req, res, next) => {
   }
 };
 
-
-
 module.exports = {
   createEstabelecimentoReview,
-  listEstabelecimentoReviews, 
+  listEstabelecimentoReviews,
   calculateEstabelecimentoAverageRating,
 };
