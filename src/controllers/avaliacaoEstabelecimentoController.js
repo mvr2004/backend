@@ -64,28 +64,33 @@ const listEstabelecimentoReviews = async (req, res, next) => {
 const calculateEstabelecimentoAverageRating = async (req, res, next) => {
   const { establishmentId } = req.params;
   try {
-    console.log('Calculating average rating for establishment:', establishmentId);
+    console.log('Calculating average rating and review count for establishment:', establishmentId);
 
-    const averageRating = await AvEstabelecimento.findAll({
+    const result = await AvEstabelecimento.findAll({
       where: { establishmentId },
       attributes: [
-        [sequelize.fn('AVG', sequelize.col('rating')), 'averageRating']
+        [sequelize.fn('AVG', sequelize.col('rating')), 'averageRating'],
+        [sequelize.fn('COUNT', sequelize.col('rating')), 'reviewCount']
       ],
       raw: true
     });
 
-    console.log('Calculated average rating:', averageRating);
+    console.log('Calculated average rating and review count:', result);
 
-    if (!averageRating || averageRating.length === 0 || !averageRating[0].averageRating) {
+    if (!result || result.length === 0 || !result[0].averageRating) {
       return res.status(404).json({ error: 'Nenhuma avaliação encontrada para este estabelecimento.' });
     }
 
-    res.json({ averageRating: averageRating[0].averageRating });
+    res.json({ 
+      averageRating: result[0].averageRating,
+      reviewCount: result[0].reviewCount
+    });
   } catch (error) {
-    console.error('Erro ao calcular média das avaliações de estabelecimento:', error);
+    console.error('Erro ao calcular média das avaliações e contagem de avaliações do estabelecimento:', error);
     next(error);
   }
 };
+
 
 
 module.exports = {
