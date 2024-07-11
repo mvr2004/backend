@@ -88,8 +88,11 @@ const calculateEstabelecimentoAverageRating = async (req, res, next) => {
 
     console.log('Calculated average rating and review count:', result);
 
-    if (!result || result.length === 0 || !result[0].averageRating) {
-      return res.status(404).json({ error: 'Nenhuma avaliação encontrada para este estabelecimento.' });
+    if (!result || result.length === 0 || result[0].averageRating === null) {
+      return res.json({ 
+        averageRating: 0,
+        reviewCount: 0
+      });
     }
 
     res.json({ 
