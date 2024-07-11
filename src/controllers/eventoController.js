@@ -1,6 +1,8 @@
 // controllers/eventoController.js
 
 const eventService = require('../services/eventoService');
+const moment = require('moment');
+
 
 // Controlador para criar um novo evento
 const createEvent = async (req, res, next) => {

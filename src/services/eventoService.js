@@ -4,6 +4,7 @@ const Evento = require('../models/Evento');
 const Subarea = require('../models/Subarea');
 const Utilizador = require('../models/User');
 const Centro = require('../models/Centro');
+const moment = require('moment');
 
 // Função para criar um novo evento
 const createEvent = async (req, res, next) => {
@@ -16,12 +17,16 @@ const createEvent = async (req, res, next) => {
       return res.status(400).json({ error: 'Utilizador não encontrado.' });
     }
 
+    // Format date and time using moment
+    const formattedDate = moment(data, 'YYYY-MM-DD').toDate();
+    const formattedTime = moment(hora, 'HH:mm:ss').toDate();
+
     // Cria o evento no banco de dados
     const event = await Evento.create({
       nome,
       localizacao,
-      data,
-      hora,
+      data: formattedDate,
+      hora: formattedTime,
       descricao,
       subareaId,
       utilizadorId,
@@ -30,7 +35,7 @@ const createEvent = async (req, res, next) => {
 
     res.status(201).json({ event });
   } catch (error) {
-    console.error('Erro ao criar o evento:', error);
+    console.error('Erro no controlador de evento:', error);
     next(error);
   }
 };
