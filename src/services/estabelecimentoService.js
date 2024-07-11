@@ -1,13 +1,11 @@
-const { Op } = require('sequelize');
+// estabelecimentoService.js
+const { Op, fn, col } = require('sequelize'); // Import required functions and objects from Sequelize
+const sequelize = require('../config/dbConfig'); // Import the Sequelize instance
 const Estabelecimento = require('../models/Estabelecimento');
 const Subarea = require('../models/Subarea');
 const Area = require('../models/Area');
 const Centro = require('../models/Centro');
 const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
-const upload = require('../config/uploadConfig');
-const sharp = require('sharp');
-const fs = require('fs');
-const path = require('path');
 
 // Função para verificar se já existe um estabelecimento com o mesmo nome ou localização
 const checkExistingEstablishment = async (nome, localizacao) => {
@@ -35,15 +33,15 @@ const createEstablishment = async (data) => {
 
   try {
     const establishment = await Estabelecimento.create({
-		  nome,
-		  localizacao,
-		  contacto,
-		  descricao,
-		  pago,
-		  foto: `https://backend-9hij.onrender.com/uploads/${filename}`,
-		  subareaId,
-		  centroId
-		});
+      nome,
+      localizacao,
+      contacto,
+      descricao,
+      pago,
+      foto: `https://backend-9hij.onrender.com/uploads/${filename}`,
+      subareaId,
+      centroId
+    });
 
     return establishment;
   } catch (error) {
@@ -130,7 +128,7 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
       ],
       attributes: {
         include: [
-          [sequelize.fn('AVG', sequelize.col('AvEstabelecimentos.rating')), 'averageRating']
+          [fn('AVG', col('AvEstabelecimentos.rating')), 'averageRating']
         ]
       },
       group: ['Estabelecimento.id', 'Subarea.id', 'Subarea.Area.id', 'Centro.id'],
@@ -143,7 +141,6 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
     throw new Error(`Erro ao buscar estabelecimentos por áreas de interesse e centro: ${error.message}`);
   }
 };
-
 
 // Função para buscar um estabelecimento pelo ID
 const getEstablishmentById = async (id) => {
