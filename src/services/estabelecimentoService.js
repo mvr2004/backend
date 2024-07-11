@@ -81,6 +81,7 @@ const getEstablishmentsByName = async (name) => {
 };
 
 // Função para buscar estabelecimentos por áreas de interesse e centro
+// Função para buscar estabelecimentos por áreas de interesse e centro com média de avaliações
 const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
   try {
     // Encontra as subáreas que pertencem às áreas de interesse fornecidas
@@ -119,7 +120,13 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
           model: Centro,
           attributes: ['id', 'centro'],
         },
+        {
+          model: AvEstabelecimento,
+          attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'averageRating']],
+          raw: true
+        }
       ],
+      group: ['Estabelecimento.id', 'Subarea.id', 'Subarea.Area.id', 'Centro.id']
     });
 
     return establishments;
@@ -128,6 +135,7 @@ const getEstablishmentsByAreasAndCentro = async (areaIdsArray, centroId) => {
     throw new Error(`Erro ao buscar estabelecimentos por áreas de interesse e centro: ${error.message}`);
   }
 };
+
 
 // Função para buscar um estabelecimento pelo ID
 const getEstablishmentById = async (id) => {
