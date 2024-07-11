@@ -30,7 +30,7 @@ router.post('/avaliacao', avaliacaoEstabelecimentoController.createEstabelecimen
 router.get('/avaliacao/:establishmentId', avaliacaoEstabelecimentoController.listEstabelecimentoReviews);
 
 // Rota para calcular a média das avaliações de um estabelecimento
-router.get('/avaliacao/media/:establishmentId', avaliacaoEstabelecimentoController.calculateEstabelecimentoAverageRating)
+router.get('/avaliacao/media/:establishmentId', avaliacaoEstabelecimentoController.calculateEstabelecimentoAverageRating);
 
 
 

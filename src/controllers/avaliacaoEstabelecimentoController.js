@@ -68,13 +68,15 @@ const calculateEstabelecimentoAverageRating = async (req, res, next) => {
 
     const averageRating = await AvEstabelecimento.findAll({
       where: { establishmentId },
-      attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'averageRating']],
+      attributes: [
+        [sequelize.fn('AVG', sequelize.col('rating')), 'averageRating']
+      ],
       raw: true
     });
 
     console.log('Calculated average rating:', averageRating);
 
-    if (!averageRating || averageRating.length === 0) {
+    if (!averageRating || averageRating.length === 0 || !averageRating[0].averageRating) {
       return res.status(404).json({ error: 'Nenhuma avaliação encontrada para este estabelecimento.' });
     }
 
@@ -84,6 +86,7 @@ const calculateEstabelecimentoAverageRating = async (req, res, next) => {
     next(error);
   }
 };
+
 
 module.exports = {
   createEstabelecimentoReview,
