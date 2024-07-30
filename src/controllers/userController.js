@@ -9,7 +9,7 @@ const UserArea = require('../models/UtilizadorArea');
 const Area = require('../models/Area');
 const { queryTable, registerUser, confirmEmail, updateUserPassword, updateUserCentro, verifyPassword } = require('../services/userService');
 const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require('../services/emailService');
-const upload = require('../config/uploadConfig'); 
+const upload = require('../configs/multer'); 
 
 exports.register = async (req, res) => {
   const { name, email, password, photoUrl } = req.body;

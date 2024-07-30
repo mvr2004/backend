@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configs/database');
-const User = require('./User');
+const User = require('./Utilizador');
 const Area = require('./Area');
 
 const UserArea = sequelize.define('UserArea', {
