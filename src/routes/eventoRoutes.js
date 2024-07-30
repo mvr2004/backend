@@ -1,15 +1,12 @@
+// routes/eventoRoutes.js
+
 const express = require('express');
 const router = express.Router();
-const eventoController = require('../controllers/eventoController');
-const participacaoEventoController = require('../controllers/participacaoEventoController');
+const eventController = require('../controllers/eventoController');
 
-router.get('/list', eventoController.getAllEventos);
-router.post('/criar', eventoController.createEvento);
-router.put('/update/:id', eventoController.updateEvento);
-router.delete('/del/:id', eventoController.deleteEvento);
-router.get('/listByCentro/:centroId', eventoController.getEventosByCentro);
-
-router.post('/addpart', participacaoEventoController.addParticipacao);
-router.delete('/removepart', participacaoEventoController.removeParticipacao);
+router.post('/create', eventController.createEvent);
+router.get('/list', eventController.getAllEvents);
+router.get('/searchByCentro', eventController.getEventsByCentro);
+router.get('/:id', eventController.getEventById);
 
 module.exports = router;

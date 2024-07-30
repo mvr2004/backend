@@ -1,58 +1,50 @@
 const Area = require('../models/Area');
+const Subarea = require('../models/Subarea'); 
+const UserArea = require('../models/UtilizadorArea');
 
-// Método para listar todas as áreas
-exports.listAreas = async (req, res) => {
+
+// Controller para consultar todas as áreas
+const getAllAreas = async (req, res, next) => {
   try {
     const areas = await Area.findAll();
-    res.json(areas);
+    res.json({ areas });
   } catch (error) {
-    console.error('Erro ao buscar áreas:', error);
-    res.status(500).json({ error: 'Erro ao buscar áreas' });
+    console.error('Erro ao buscar todas as áreas:', error);
+    next(error);
   }
 };
 
-// Método para inserir uma nova área
-exports.createArea = async (req, res) => {
-  const { nomeArea } = req.body;
+// Controller para consultar as subáreas de uma área específica
+const getSubareasByAreaId = async (req, res, next) => {
+  const { areaId } = req.params;
   try {
-    const newArea = await Area.create({ nomeArea });
-    res.json(newArea);
+    const subareas = await Subarea.findAll({
+      where: { areaId: areaId },
+      include: [{ model: Area, attributes: ['id', 'nomeArea'] }],
+    });
+    res.json({ subareas });
   } catch (error) {
-    console.error('Erro ao criar área:', error);
-    res.status(500).json({ error: 'Erro ao criar área' });
+    console.error('Erro ao buscar subáreas por área:', error);
+    next(error);
   }
 };
 
-// Método para atualizar uma área existente
-exports.updateArea = async (req, res) => {
-  const { id } = req.params;
-  const { nomeArea } = req.body;
+
+// Controller para associar um usuário a uma área
+const associateUserWithArea = async (req, res, next) => {
   try {
-    const area = await Area.findByPk(id);
-    if (!area) {
-      return res.status(404).json({ error: 'Área não encontrada' });
-    }
-    area.nomeArea = nomeArea;
-    await area.save();
-    res.json(area);
+    const { userId, areaId } = req.body;
+    const association = await UserArea.create({ userId, areaId });
+    res.status(201).json({ association });
   } catch (error) {
-    console.error('Erro ao atualizar área:', error);
-    res.status(500).json({ error: 'Erro ao atualizar área' });
+    console.error('Erro ao associar usuário com área:', error);
+    next(error);
   }
 };
 
-// Método para deletar uma área existente
-exports.deleteArea = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const area = await Area.findByPk(id);
-    if (!area) {
-      return res.status(404).json({ error: 'Área não encontrada' });
-    }
-    await area.destroy();
-    res.json({ message: 'Área deletada com sucesso' });
-  } catch (error) {
-    console.error('Erro ao deletar área:', error);
-    res.status(500).json({ error: 'Erro ao deletar área' });
-  }
+
+module.exports = {
+  getAllAreas,
+  getSubareasByAreaId,
+  associateUserWithArea,
 };

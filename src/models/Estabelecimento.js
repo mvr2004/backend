@@ -63,7 +63,7 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
                             contacto: '+351 123 456 789',
                             descricao: 'Restaurante tradicional português',
                             pago: true,
-                            foto: 'https://backend-ai2-proj.onrender.com/uploads/restaurante.jpg',
+                            foto: 'https://backend-9hij.onrender.com/uploads/restaurante.jpg',
                             subareaId: 14, 
                             centroId: 1 
                         },
@@ -73,7 +73,7 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
                             contacto: '+351 987 654 321',
                             descricao: 'Ginasio de musculação e fitness',
                             pago: true,
-                            foto: 'https://backend-ai2-proj.onrender.com/uploads/ginasio.jpg',
+                            foto: 'https://backend-9hij.onrender.com/uploads/ginasio.jpg',
                             subareaId: 4, 
                             centroId: 1 
                         }
