@@ -27,6 +27,7 @@ const Area = sequelize.define('Area', {
             { nomeArea: 'Habitação/Alojamento' },
             { nomeArea: 'Transportes' },
             { nomeArea: 'Lazer' }
+            // Adicione mais áreas conforme necessário
           ]);
         }
       } catch (error) {

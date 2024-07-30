@@ -42,14 +42,14 @@ const Report = sequelize.define('Report', {
 		   {
             assunto: 'Imagem não atualiza',
             descriscao: 'Eu mudei a minha imagem de perfil e esta não atualiza',
-            imageUrl: 'https://backend-9hij.onrender.com/uploads/reports/report1.jpg',
+            imageUrl: 'https://backend-ai2-proj.onrender.com/uploads/report1.jpg',
             resolvido: false,
             userId: 2
           },
           {
             assunto: 'Oh Miguel pah',
             descriscao: 'Endirei-te me isso na aplicação pah, ta tudo mal feito. Logo já te vou ajudar a compor isso e fazer mais umas coisitas.',
-            imageUrl: 'https://backend-9hij.onrender.com/uploads/reports/report2.jpg',
+            imageUrl: 'https://backend-ai2-proj.onrender.com/uploads/report2.jpg',
             resolvido: false,
             userId: 1
           },

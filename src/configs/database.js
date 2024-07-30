@@ -1,6 +1,7 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
 
+//credenciais para entrar na Base de dados
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -12,12 +13,13 @@ const sequelize = new Sequelize(
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false
+        rejectUnauthorized: false 
       }
     }
   }
 );
 
+//Ver se a conexão da BD está ativa
 sequelize.authenticate()
   .then(() => {
     console.log('Conexão a BD estabelecida com sucesso.');

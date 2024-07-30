@@ -1,32 +1,27 @@
 const express = require('express');
-const passport = require('./configs/passport');
-const session = require('express-session');
-const cors = require('cors');
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const genericRoutes = require('./routes/genericRoutes');
-const areaRoutes = require('./routes/areaRoutes');
-const estabRoutes = require('./routes/estabelecimentoRoutes');
-const eventRoutes = require('./routes/eventoRoutes');
-const partRoutes = require('./routes/participacaoRoutes');
-const sequelize = require('./configs/database');
-const errorHandler = require('./middleware/errorHandler');
-const dotenv = require('dotenv');
 const path = require('path');
-const multer = require('multer');
-
-dotenv.config();
-
 const app = express();
 
+//bd
+const sequelize = require('./configs/database'); 
+
+//declarar routes
+const adminRoutes = require('./routes/adminRoutes');
+const centroRoutes = require('./routes/centroRoutes');
+const reportRoutes = require('./routes/reportRoutes');
+const userRoutes = require('./routes/userRoutes');
+const areaRoutes = require('./routes/areasubareaRoutes');
+const estabelecimentoRoutes = require('./routes/estabelecimentoRoutes');
+const eventoRoutes = require('./routes/eventoRoutes');
+
+//Configurações
 app.set('port', process.env.PORT || 3000);
 
 // Middleware para servir arquivos estáticos na pasta 'uploads'
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'))); // Modificado para garantir o caminho correto
 
-// Middlewares
+//Middlewares
 app.use(express.json());
-app.use(cors());
 
 // Configuração de headers CORS
 app.use((req, res, next) => {
@@ -38,54 +33,48 @@ app.use((req, res, next) => {
 });
 
 // Rotas
-app.use('/auth', authRoutes);
+app.use('/admin', adminRoutes);
+app.use('/centro', centroRoutes);
+app.use('/report', reportRoutes);
 app.use('/user', userRoutes);
-app.use('/generic', genericRoutes);
-app.use('/estab', estabRoutes);
-app.use('/areas', areaRoutes);
-app.use('/envt', eventRoutes);
-app.use('/part', partRoutes);
+app.use('/area', areaRoutes);
+app.use('/estabelecimento', estabelecimentoRoutes);
+app.use('/eventos', eventoRoutes);
 
-app.get('/', (req, res) => {
-    res.send('API está a funcionar. Acesse /api/data para obter dados.');
+app.use('/teste', (req, res) => {
+    res.send("Rota TESTE.");
 });
 
-app.get('/health', (req, res) => {
-    res.send('API está funcionando corretamente.');
+app.use('/', (req, res) => {
+    res.send("Hello World");
 });
+
+// Sincroniza os modelos com a base de dados
+sequelize.sync({ alter: true })
+  .then(() => {
+    app.listen(app.get('port'), () => {
+      console.log(`Servidor iniciado na porta ${app.get('port')}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Erro ao sincronizar com a base de dados:', error);
+  });
+
+// multer:configurations
+const multer = require('multer');
 
 // Configuração do armazenamento de arquivos
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, 'public/uploads'));
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname)); // Nome do arquivo no destino
-    }
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../uploads')); // Modificado para garantir o caminho correto
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname)); // Nome do arquivo no destino
+  }
 });
 
 // Instância do multer com as configurações
 const upload = multer({ storage });
-app.use(upload.single('file')); // Middleware para upload de arquivos
 
-// Configuração de sessões
-app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Middleware de tratamento de erros
-app.use(errorHandler);
-
-// Sincroniza os modelos com a base de dados e inicia o servidor
-sequelize.sync({ alter: true })
-    .then(() => {
-        app.listen(app.get('port'), () => {
-            console.log(`Servidor está a funcionar em http://localhost:${app.get('port')}`);
-        });
-    })
-    .catch(err => {
-        console.error('Erro ao sincronizar com a base de dados:', err);
-    });
-
-module.exports = app;
+module.exports = upload;

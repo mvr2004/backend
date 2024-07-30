@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configs/database');
 const Subarea = require('./Subarea');
-const Utilizador = require('./Utilizador');
+const Utilizador = require('./User');
 const Centro = require('./Centro');
 
 const Evento = sequelize.define('Evento', {
@@ -89,6 +89,7 @@ const Evento = sequelize.define('Evento', {
                             utilizadorId: 1, 
                             centroId: 1 
                         }
+                        // Adicione mais registros conforme necessário
                     ]);
                 }
             } catch (error) {

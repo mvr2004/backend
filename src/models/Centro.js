@@ -24,6 +24,7 @@ const Centro = sequelize.define('Centro', {
           await Centro.bulkCreate([
             { id: 1, centro: 'Viseu' },
             { id: 2, centro: 'Tomar' },
+            // Adicione mais centros conforme necessário
           ]);
         }
       } catch (error) {
