@@ -1,5 +1,5 @@
 const express = require('express');
-const passport = require('./config/passport');
+const passport = require('./configs/passport');
 const session = require('express-session');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
@@ -9,7 +9,7 @@ const areaRoutes = require('./routes/areaRoutes');
 const estabRoutes = require('./routes/estabelecimentoRoutes');
 const eventRoutes = require('./routes/eventoRoutes');
 const partRoutes = require('./routes/participacaoRoutes');
-const sequelize = require('./config/dbConfig');
+const sequelize = require('./configs/database');
 const errorHandler = require('./middleware/errorHandler');
 const dotenv = require('dotenv');
 const path = require('path');

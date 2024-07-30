@@ -2,7 +2,7 @@
 const express = require('express');
 const userController = require('../controllers/userController'); // Importando o userController
 const router = express.Router();
-const upload = require('../config/uploadConfig');
+const upload = require('../configs/multer');
 
 
 router.post('/register', userController.register); // Usando userController.register

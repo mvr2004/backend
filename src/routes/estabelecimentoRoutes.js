@@ -3,7 +3,7 @@ const express = require('express');
 const estabelecimentoController = require('../controllers/estabelecimentoController'); 
 const avaliacaoEstabelecimentoController = require('../controllers/avaliacaoEstabelecimentoController');
 const router = express.Router();
-const upload = require('../config/uploadConfig');
+const upload = require('../configs/multer');
 
 
 // Rota para criar um estabelecimento

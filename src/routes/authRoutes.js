@@ -1,6 +1,6 @@
 // src/routes/authRoutes.js
 const express = require('express');
-const passport = require('passport');
+const passport = require('../configs/passport');
 const { login, googleLogin,facebookLogin } = require('../controllers/authController');
 const router = express.Router();
 

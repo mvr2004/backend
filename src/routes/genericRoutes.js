@@ -1,7 +1,7 @@
 // src/routes/genericRoutes.js
 const express = require('express');
 const router = express.Router();
-const upload = require('../config/multer'); // Importação do uploadConfig
+const upload = require('../configs/multer'); // Importação do uploadConfig
 
 router.post('/upload', upload.single('file'), (req, res) => {
   console.log(req.file);

@@ -1,7 +1,7 @@
 // controllers/establishmentController.js
 
 const Estabelecimento = require('../models/Estabelecimento');
-const upload = require('../config/multer');
+const upload = require('../configs/multer');
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
