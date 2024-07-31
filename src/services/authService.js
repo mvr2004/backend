@@ -26,6 +26,7 @@ exports.verifyGoogleToken = async (token) => {
     userid: payload.sub,
     email: payload.email,
     name: payload.name,
+    photoUrl: payload.picture, // Obter URL da foto
   };
 };
 

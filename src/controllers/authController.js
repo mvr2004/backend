@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
 };
 
 exports.googleLogin = async (req, res) => {
-  const { token, photoUrl } = req.body;
+  const { token } = req.body;
   console.log('Token recebido:', token);
 
   try {
@@ -30,7 +30,7 @@ exports.googleLogin = async (req, res) => {
 
     if (!user) {
       const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
-      const newUser = await registerUser(googleUser.name, googleUser.email, password, photoUrl); // Passa a URL da foto
+      const newUser = await registerUser(googleUser.name, googleUser.email, password, googleUser.photoUrl); // Passa a URL da foto do Google
       if (!newUser) {
         throw new Error('Falha ao registrar utilizador');
       }
