@@ -1,4 +1,3 @@
-// src/services/authService.js
 const User = require('../models/Utilizador');
 const bcrypt = require('bcrypt');
 const { OAuth2Client } = require('google-auth-library');
@@ -17,8 +16,6 @@ exports.verifyLogin = async (email, password) => {
   return user;
 };
 
-
-
 exports.verifyGoogleToken = async (token) => {
   const ticket = await client.verifyIdToken({
     idToken: token,
@@ -28,7 +25,7 @@ exports.verifyGoogleToken = async (token) => {
   return {
     userid: payload.sub,
     email: payload.email,
-    nome: payload.nome,
+    name: payload.name,
   };
 };
 
@@ -36,9 +33,9 @@ exports.findUserByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
 
-exports.registerUser = async (nome, email, password, FotoUrl) => {
+exports.registerUser = async (name, email, password, fotoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ nome, email, password: hashedPassword, FotoUrl });
+  const user = await User.create({ nome: name, email, password: hashedPassword, fotoUrl });
   return !!user;
 };
 

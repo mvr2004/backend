@@ -1,7 +1,4 @@
-// src/controllers/authController.js
-const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser, verifyUserIsActive } = require('../services/authService');
-const { v4: uuidv4 } = require('uuid');
-
+const { verifyLogin, verifyGoogleToken, findUserByEmail, registerUser } = require('../services/authService');
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -21,8 +18,6 @@ exports.login = async (req, res) => {
   }
 };
 
-
-
 exports.googleLogin = async (req, res) => {
   const { token, fotoUrl } = req.body;
   console.log('Token recebido:', token);
@@ -35,9 +30,9 @@ exports.googleLogin = async (req, res) => {
 
     if (!user) {
       const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
-      const newUser = await registerUser(googleUser.nome, googleUser.email, password, fotoUrl); // Passa a URL da foto
+      const newUser = await registerUser(googleUser.name, googleUser.email, password, fotoUrl); // Passa a URL da foto
       if (!newUser) {
-        throw new Error('Falha ao registrar usuário');
+        throw new Error('Falha ao registrar utilizador');
       }
       user = await findUserByEmail(googleUser.email);
     }
@@ -47,7 +42,6 @@ exports.googleLogin = async (req, res) => {
     res.status(400).json({ message: `Erro ao fazer login com Google: ${err.message}` });
   }
 };
-
 
 exports.facebookLogin = async (req, res) => {
   const { accessToken, userData } = req.body;
@@ -71,8 +65,8 @@ const findOrCreateUserWithFacebook = async (accessToken, userData) => {
   if (!user) {
     const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
     const fotoUrl = userData.picture?.data?.url || ''; // Verificar a presença do campo foto
-    const firstName = userData.nome || '';
-    const newUser = await registerUser(firstName, email, password, fotoUrl);
+    const name = userData.name || '';
+    const newUser = await registerUser(name, email, password, fotoUrl);
     if (!newUser) {
       throw new Error('Falha ao registrar utilizador');
     }
