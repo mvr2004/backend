@@ -9,7 +9,7 @@ exports.verifyLogin = async (email, password) => {
   const user = await User.findOne({ where: { email } });
   if (!user) throw new Error('Utilizador não encontrado');
   
-  if (!user.isActive) throw new Error('Utilizador inativo');
+  if (!user.Ativo) throw new Error('Utilizador inativo');
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) throw new Error('Palavra passe inválida');
@@ -44,6 +44,6 @@ exports.registerUser = async (nome, email, password, FotoUrl) => {
 
 exports.verifyUserIsActive = async (email) => {
   const user = await User.findOne({ where: { email } });
-  if (user && !user.isActive) throw new Error('Utilizador inativo');
+  if (user && !user.Ativo) throw new Error('Utilizador inativo');
   return user;
 };

@@ -31,7 +31,7 @@ exports.googleLogin = async (req, res) => {
     const googleUser = await verifyGoogleToken(token);
     let user = await findUserByEmail(googleUser.email);
 
-    if (user && !user.isActive) throw new Error('Utilizador inativo');
+    if (user && !user.Ativo) throw new Error('Utilizador inativo');
 
     if (!user) {
       const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
@@ -56,7 +56,7 @@ exports.facebookLogin = async (req, res) => {
   try {
     const user = await findOrCreateUserWithFacebook(accessToken, userData);
     // Verifica se o usuário é inativo antes de permitir o login
-    if (user && !user.isActive) throw new Error('Utilizador inativo');
+    if (user && !user.Ativo) throw new Error('Utilizador inativo');
 
     res.json({ message: 'Login bem-sucedido', user });
   } catch (err) {
