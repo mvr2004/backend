@@ -28,7 +28,7 @@ exports.verifyGoogleToken = async (token) => {
   return {
     userid: payload.sub,
     email: payload.email,
-    name: payload.name,
+    nome: payload.nome,
   };
 };
 
@@ -36,9 +36,9 @@ exports.findUserByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
 
-exports.registerUser = async (name, email, password, photoUrl) => {
+exports.registerUser = async (nome, email, password, FotoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ name, email, password: hashedPassword, photoUrl });
+  const user = await User.create({ nome, email, password: hashedPassword, FotoUrl });
   return !!user;
 };
 
