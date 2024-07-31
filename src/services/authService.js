@@ -36,7 +36,7 @@ exports.findUserByEmail = async (email) => {
 
 exports.registerUser = async (name, email, password, photoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ nome: name, email, password: hashedPassword, fotoUrl });
+  const user = await User.create({ nome: name, email, password: hashedPassword, fotoUrl: photoUrl }); // Ensure photoUrl is set here
   return !!user;
 };
 
