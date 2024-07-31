@@ -7,7 +7,7 @@ const AvEstabelecimento = require('../models/AvaliacaoEstabelecimento');
 // Controlador para criar ou atualizar uma avaliação de estabelecimento
 const createEstabelecimentoReview = async (req, res, next) => {
   try {
-    const { userId, establishmentId, rating } = req.body;
+    const { userId, estabelecimentoId, rating } = req.body;
 
     // Verifica se o usuário e o estabelecimento existem
     const user = await User.findByPk(userId);
@@ -16,15 +16,15 @@ const createEstabelecimentoReview = async (req, res, next) => {
       return res.status(404).json({ error: 'Utilizador não encontrado.' });
     }
 
-    const estabelecimento = await Estabelecimento.findByPk(establishmentId);
+    const estabelecimento = await Estabelecimento.findByPk(estabelecimentoId);
     if (!estabelecimento) {
-      console.log('Estabelecimento não encontrado com id:', establishmentId);
+      console.log('Estabelecimento não encontrado com id:', estabelecimentoId);
       return res.status(404).json({ error: 'Estabelecimento não encontrado.' });
     }
 
-    // Verifica se já existe uma avaliação para o par userId e establishmentId
+    // Verifica se já existe uma avaliação para o par userId e estabelecimentoId
     const existingReview = await AvEstabelecimento.findOne({
-      where: { userId, establishmentId }
+      where: { userId, estabelecimentoId }
     });
 
     if (existingReview) {
@@ -36,7 +36,7 @@ const createEstabelecimentoReview = async (req, res, next) => {
       // Cria uma nova avaliação de estabelecimento
       const review = await AvEstabelecimento.create({
         userId,
-        establishmentId,
+        estabelecimentoId,
         rating
       });
       res.status(201).json({ review });
@@ -49,13 +49,13 @@ const createEstabelecimentoReview = async (req, res, next) => {
 
 // Controlador para listar as avaliações de um estabelecimento
 const listEstabelecimentoReviews = async (req, res, next) => {
-  const { establishmentId } = req.params;
+  const { estabelecimentoId } = req.params;
   try {
-    console.log('Listing reviews for establishment:', establishmentId);
+    console.log('Listing reviews for establishment:', estabelecimentoId);
 
     // Busca todas as avaliações para o estabelecimento específico
     const reviews = await AvEstabelecimento.findAll({
-      where: { establishmentId },
+      where: { estabelecimentoId },
       include: [{ model: User, attributes: ['id', 'name'] }] // Inclui o nome do usuário na resposta
     });
 
@@ -73,12 +73,12 @@ const listEstabelecimentoReviews = async (req, res, next) => {
 };
 
 const calculateEstabelecimentoAverageRating = async (req, res, next) => {
-  const { establishmentId } = req.params;
+  const { estabelecimentoId } = req.params;
   try {
-    console.log('Calculating average rating and review count for establishment:', establishmentId);
+    console.log('Calculating average rating and review count for establishment:', estabelecimentoId);
 
     const result = await AvEstabelecimento.findAll({
-      where: { establishmentId },
+      where: { estabelecimentoId },
       attributes: [
         [sequelize.fn('AVG', sequelize.col('rating')), 'averageRating'],
         [sequelize.fn('COUNT', sequelize.col('rating')), 'reviewCount']

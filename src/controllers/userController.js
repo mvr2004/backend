@@ -12,9 +12,9 @@ const { sendConfirmationEmail,sendResetEmail , sendNewPasswordEmail } = require(
 const upload = require('../configs/multer'); 
 
 exports.register = async (req, res) => {
-  const { name, email, password, photoUrl } = req.body;
+  const { nome, email, password, fotoUrl } = req.body;
   try {
-    const result = await registerUser(name, email, password, photoUrl);
+    const result = await registerUser(nome, email, password, fotoUrl);
     if (result.success === false && result.reason === 'user_exists') {
       return res.status(400).json({ message: 'Utilizador já existe' });
     }
@@ -197,9 +197,9 @@ exports.updateUserProfile = async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        if (req.body.name !== undefined && req.body.name !== null) {
-            console.log(`Updating user name to ${req.body.name}`);
-            user.name = req.body.name;
+        if (req.body.nome !== undefined && req.body.nome !== null) {
+            console.log(`Updating user nome to ${req.body.nome}`);
+            user.nome = req.body.nome;
         }
 
         if (req.file) {
@@ -213,8 +213,8 @@ exports.updateUserProfile = async (req, res) => {
                     .resize({ width: 300, height: 300 })
                     .toBuffer();
 
-                const filename = `${Date.now()}-${req.file.originalname}`;
-                const filepath = path.join(__dirname, '../public/uploads/', filename);
+                const filenome = `${Date.now()}-${req.file.originalnome}`;
+                const filepath = path.join(__dirnome, '../public/uploads/', filenome);
                 await sharp(resizedImage).toFile(filepath);
                 console.log(`Saved resized image to ${filepath}`);
 
@@ -227,7 +227,7 @@ exports.updateUserProfile = async (req, res) => {
                     }
                 });
 
-                user.photoUrl = `https://backend-9hij.onrender.com/uploads/${filename}`;
+                user.fotoUrl = `https://backend-9hij.onrender.com/uploads/${filenome}`;
             } catch (imageError) {
                 console.error('Error processing image:', imageError);
                 return res.status(400).json({ error: 'Invalid image input' });

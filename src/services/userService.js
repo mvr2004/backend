@@ -21,16 +21,16 @@ exports.checkUserExists = async (email) => {
   return !!user;
 };
 
-exports.registerUser = async (name, email, password, photoUrl) => {
+exports.registerUser = async (nome, email, password, fotoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const confirmationCode = generateConfirmationCode();
 
   try {
-    const user = await User.create({ name, email, password: hashedPassword, photoUrl, confirmationCode });
+    const user = await User.create({ nome, email, password: hashedPassword, fotoUrl, confirmationCode });
     await sendConfirmationEmail(email, confirmationCode);
     return { success: true, user };
   } catch (err) {
-    if (err.name === 'SequelizeUniqueConstraintError') {
+    if (err.nome === 'SequelizeUniqueConstraintError') {
       return { success: false, reason: 'user_exists' };
     }
     throw err;
