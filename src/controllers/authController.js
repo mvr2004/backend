@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
 };
 
 exports.googleLogin = async (req, res) => {
-  const { token, fotoUrl } = req.body;
+  const { token, photoUrl } = req.body;
   console.log('Token recebido:', token);
 
   try {
@@ -30,7 +30,7 @@ exports.googleLogin = async (req, res) => {
 
     if (!user) {
       const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
-      const newUser = await registerUser(googleUser.name, googleUser.email, password, fotoUrl); // Passa a URL da foto
+      const newUser = await registerUser(googleUser.name, googleUser.email, password, photoUrl); // Passa a URL da foto
       if (!newUser) {
         throw new Error('Falha ao registrar utilizador');
       }
@@ -64,9 +64,9 @@ const findOrCreateUserWithFacebook = async (accessToken, userData) => {
 
   if (!user) {
     const password = Math.random().toString(36).slice(-8); // Gerar uma senha aleatória
-    const fotoUrl = userData.picture?.data?.url || ''; // Verificar a presença do campo foto
+    const photoUrl = userData.picture?.data?.url || ''; // Verificar a presença do campo foto
     const name = userData.name || '';
-    const newUser = await registerUser(name, email, password, fotoUrl);
+    const newUser = await registerUser(name, email, password, photoUrl);
     if (!newUser) {
       throw new Error('Falha ao registrar utilizador');
     }

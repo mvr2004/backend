@@ -33,9 +33,9 @@ exports.findUserByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
 
-exports.registerUser = async (name, email, password, fotoUrl) => {
+exports.registerUser = async (name, email, password, photoUrl) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ nome: name, email, password: hashedPassword, fotoUrl });
+  const user = await User.create({ nome: name, email, password: hashedPassword, photoUrl });
   return !!user;
 };
 
