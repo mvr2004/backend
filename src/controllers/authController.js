@@ -14,9 +14,16 @@ exports.login = async (req, res) => {
     }
   } catch (err) {
     console.error(`Erro ao fazer login: ${err.message}`);
-    res.status(400).json({ message: `Erro ao fazer login: ${err.message}` });
+    if (err.message === 'Utilizador não encontrado') {
+      res.status(404).json({ message: 'Utilizador não encontrado' });
+    } else if (err.message === 'Palavra passe inválida') {
+      res.status(401).json({ message: 'Palavra passe inválida' });
+    } else {
+      res.status(400).json({ message: `Erro ao fazer login: ${err.message}` });
+    }
   }
 };
+
 
 exports.googleLogin = async (req, res) => {
   const { token } = req.body;
