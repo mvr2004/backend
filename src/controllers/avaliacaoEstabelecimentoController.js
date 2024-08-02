@@ -73,12 +73,12 @@ const listEstabelecimentoReviews = async (req, res, next) => {
 };
 
 const calculateEstabelecimentoAverageRating = async (req, res, next) => {
-  const { estabelecimentoId } = req.params;
+  const { establishmentId } = req.params; // Verifique se você está usando 'establishmentId' aqui, conforme definido na rota
   try {
-    console.log('Calculating average rating and review count for establishment:', estabelecimentoId);
+    console.log('Calculating average rating and review count for establishment:', establishmentId);
 
     const result = await AvEstabelecimento.findAll({
-      where: { estabelecimentoId },
+      where: { estabelecimentoId: establishmentId },
       attributes: [
         [sequelize.fn('AVG', sequelize.col('rating')), 'averageRating'],
         [sequelize.fn('COUNT', sequelize.col('rating')), 'reviewCount']
@@ -104,6 +104,7 @@ const calculateEstabelecimentoAverageRating = async (req, res, next) => {
     next(error);
   }
 };
+
 
 module.exports = {
   createEstabelecimentoReview,
