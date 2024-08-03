@@ -9,6 +9,7 @@ const areaRoutes = require('./routes/areaRoutes');
 const estabRoutes = require('./routes/estabelecimentoRoutes');
 const eventRoutes = require('./routes/eventoRoutes');
 const partRoutes = require('./routes/participacaoRoutes');
+const formularioRoutes = require('./routes/formularioRoutes');
 const sequelize = require('./configs/database');
 const errorHandler = require('./middleware/errorHandler');
 const dotenv = require('dotenv');
@@ -46,6 +47,7 @@ app.use('/estab', estabRoutes);
 app.use('/areas', areaRoutes);
 app.use('/envt', eventRoutes);
 app.use('/part', partRoutes);
+app.use('/form', formularioRoutes);
 
 app.get('/', (req, res) => {
     res.send('API está a funcionar. Acesse /api/data para obter dados.');
