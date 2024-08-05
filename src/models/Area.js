@@ -24,13 +24,13 @@ const Area = sequelize.define('Area', {
         const existingAreas = await Area.count();
         if (existingAreas === 0) {
           await Area.bulkCreate([
-            { nomeArea: 'Saúde', icon: 'uploads/icons_area/syringe.png' },
-            { nomeArea: 'Desporto', icon: 'uploads/icons_area/weight.png' },
-            { nomeArea: 'Formação', icon: 'uploads/icons_area/formation.png' },
-            { nomeArea: 'Gastronomia', icon: 'uploads/icons_area/gastronomy.png' },
-            { nomeArea: 'Habitação/Alojamento', icon: 'uploads/icons_area/home.png' },
-            { nomeArea: 'Transportes', icon: 'uploads/icons_area/car.png' },
-            { nomeArea: 'Lazer', icon: 'uploads/icons_area/cinema.png' }
+            { nomeArea: 'Saúde', icon: 'https://backend-9hij.onrender.com/uploads/icons_area/syringe.png' },
+            { nomeArea: 'Desporto', icon: 'https://backend-9hij.onrender.com/uploads/icons_area/weight.png' },
+            { nomeArea: 'Formação', icon: 'https://backend-9hij.onrender.com/uploads/icons_area/formation.png' },
+            { nomeArea: 'Gastronomia', icon: 'https://backend-9hij.onrender.com/uploads/icons_area/gastronomy.png' },
+            { nomeArea: 'Habitação/Alojamento', icon: 'https://backend-9hij.onrender.com/uploads/icons_area/home.png' },
+            { nomeArea: 'Transportes', icon: 'https://backend-9hij.onrender.com/uploads/icons_area/car.png' },
+            { nomeArea: 'Lazer', icon: 'https://backend-9hij.onrender.com/uploads/icons_area/cinema.png' }
           ]);
         }
       } catch (error) {
