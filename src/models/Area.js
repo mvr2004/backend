@@ -12,6 +12,10 @@ const Area = sequelize.define('Area', {
     allowNull: false,
     unique: true
   },
+  icon: { 
+    type: DataTypes.STRING,
+    allowNull: true
+  }
 }, {
   timestamps: false,
   hooks: {
@@ -20,13 +24,13 @@ const Area = sequelize.define('Area', {
         const existingAreas = await Area.count();
         if (existingAreas === 0) {
           await Area.bulkCreate([
-            { nomeArea: 'Saúde' },
-            { nomeArea: 'Desporto' },
-            { nomeArea: 'Formação' },
-            { nomeArea: 'Gastronomia' },
-            { nomeArea: 'Habitação/Alojamento' },
-            { nomeArea: 'Transportes' },
-            { nomeArea: 'Lazer' }
+            { nomeArea: 'Saúde', icon: 'uploads/icons_area/syringe.png' },
+            { nomeArea: 'Desporto', icon: 'uploads/icons_area/weight.png' },
+            { nomeArea: 'Formação', icon: 'uploads/icons_area/formation.png' },
+            { nomeArea: 'Gastronomia', icon: 'uploads/icons_area/gastronomy.png' },
+            { nomeArea: 'Habitação/Alojamento', icon: 'uploads/icons_area/home.png' },
+            { nomeArea: 'Transportes', icon: 'uploads/icons_area/car.png' },
+            { nomeArea: 'Lazer', icon: 'uploads/icons_area/cinema.png' }
           ]);
         }
       } catch (error) {
