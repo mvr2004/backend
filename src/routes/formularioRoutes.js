@@ -17,4 +17,7 @@ router.get('/formularios/:formularioId/respostas', formularioController.getRespo
 router.get('/utilizadores/:utilizadorId/formularios/respondidos', formularioController.getFormulariosRespondidos);
 router.get('/utilizadores/:utilizadorId/eventos/:eventoId/formularios/:formularioId/respostas', formularioController.getFormularioResponsesByUserAndEvent);
 
+// Nova rota para pesquisar formulários respondidos de um evento
+router.get('/utilizadores/:utilizadorId/eventos/:eventoId/formularios/respondidos', formularioController.getFormulariosRespondidosPorEvento);
+
 module.exports = router;
