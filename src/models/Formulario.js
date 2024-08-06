@@ -1,25 +1,30 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configs/database');
-const Evento = require('./Evento');
+const Formulario = require('./Formulario');
+const Utilizador = require('./Utilizador');
+const CampoFormulario = require('./CampoFormulario');
 
-const Formulario = sequelize.define('Formulario', {
+const RespostaFormulario = sequelize.define('RespostaFormulario', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    nome: {
+    resposta: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    ativo: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    },
-    eventoId: {
+    campoFormularioId: {
         type: DataTypes.INTEGER,
         references: {
-            model: Evento,
+            model: CampoFormulario,
+            key: 'id'
+        }
+    },
+    utilizadorId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Utilizador,
             key: 'id'
         }
     }
@@ -27,7 +32,8 @@ const Formulario = sequelize.define('Formulario', {
     timestamps: false
 });
 
-Evento.hasMany(Formulario, { foreignKey: 'eventoId' });
-Formulario.belongsTo(Evento, { foreignKey: 'eventoId' });
+CampoFormulario.hasMany(RespostaFormulario, { foreignKey: 'campoFormularioId' });
+RespostaFormulario.belongsTo(CampoFormulario, { foreignKey: 'campoFormularioId' });
+RespostaFormulario.belongsTo(Utilizador, { foreignKey: 'utilizadorId' });
 
-module.exports = Formulario;
+module.exports = RespostaFormulario;

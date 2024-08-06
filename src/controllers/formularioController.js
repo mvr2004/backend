@@ -76,3 +76,44 @@ exports.getResponsesByFormulario = async (req, res) => {
         res.status(500).json({ error: 'Erro ao obter respostas' });
     }
 };
+
+// Obter formulários respondidos por um utilizador
+exports.getFormulariosRespondidos = async (req, res) => {
+    try {
+        const { utilizadorId } = req.params;
+        const formulariosRespondidos = await RespostaFormulario.findAll({
+            where: { utilizadorId },
+            include: [{
+                model: CampoFormulario,
+                include: [Formulario]
+            }]
+        });
+        const formularios = formulariosRespondidos.map(resposta => resposta.CampoFormulario.Formulario);
+        res.json(formularios);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao obter formulários respondidos' });
+    }
+};
+
+// Obter respostas de um formulário por utilizador e evento
+exports.getFormularioResponsesByUserAndEvent = async (req, res) => {
+    try {
+        const { utilizadorId, eventoId, formularioId } = req.params;
+        const campos = await CampoFormulario.findAll({
+            where: { formularioId },
+            include: {
+                model: RespostaFormulario,
+                where: { utilizadorId },
+                include: [Utilizador]
+            }
+        });
+        const formulario = await Formulario.findOne({ where: { id: formularioId, eventoId } });
+        if (formulario) {
+            res.json({ formulario, campos });
+        } else {
+            res.status(404).json({ error: 'Formulário não encontrado para este evento' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao obter respostas' });
+    }
+};
