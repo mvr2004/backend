@@ -1,39 +1,26 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configs/database');
-const Formulario = require('./Formulario');
-const Utilizador = require('./Utilizador');
-const CampoFormulario = require('./CampoFormulario');
 
-const RespostaFormulario = sequelize.define('RespostaFormulario', {
+const Formulario = sequelize.define('Formulario', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    resposta: {
+    nome: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    campoFormularioId: {
+    eventoId: {
         type: DataTypes.INTEGER,
-        references: {
-            model: CampoFormulario,
-            key: 'id'
-        }
+        allowNull: false
     },
-    utilizadorId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Utilizador,
-            key: 'id'
-        }
+    ativo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
     }
 }, {
     timestamps: false
 });
 
-CampoFormulario.hasMany(RespostaFormulario, { foreignKey: 'campoFormularioId' });
-RespostaFormulario.belongsTo(CampoFormulario, { foreignKey: 'campoFormularioId' });
-RespostaFormulario.belongsTo(Utilizador, { foreignKey: 'utilizadorId' });
-
-module.exports = RespostaFormulario;
+module.exports = Formulario;

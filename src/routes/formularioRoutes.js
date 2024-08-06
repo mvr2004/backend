@@ -13,7 +13,7 @@ router.post('/formularios/:formularioId/campos', formularioController.createCamp
 router.post('/formularios/respostas', formularioController.submitFormularioResponse);
 router.get('/formularios/:formularioId/respostas', formularioController.getResponsesByFormulario);
 
-
+// Rotas para obter formulários respondidos
 router.get('/utilizadores/:utilizadorId/formularios/respondidos', formularioController.getFormulariosRespondidos);
 router.get('/utilizadores/:utilizadorId/eventos/:eventoId/formularios/:formularioId/respostas', formularioController.getFormularioResponsesByUserAndEvent);
 
