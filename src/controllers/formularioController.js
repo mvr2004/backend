@@ -138,3 +138,16 @@ exports.getFormulariosRespondidosPorEvento = async (req, res) => {
         res.status(500).json({ error: 'Erro ao obter formulários respondidos para o evento' });
     }
 };
+
+// Obter formulários de um evento
+exports.getFormulariosByEvento = async (req, res) => {
+    try {
+        const { eventoId } = req.params;
+        const formularios = await Formulario.findAll({
+            where: { eventoId }
+        });
+        res.json(formularios);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao obter formulários para o evento' });
+    }
+};

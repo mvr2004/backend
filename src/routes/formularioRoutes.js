@@ -20,4 +20,8 @@ router.get('/utilizadores/:utilizadorId/eventos/:eventoId/formularios/:formulari
 // Nova rota para pesquisar formulários respondidos de um evento
 router.get('/utilizadores/:utilizadorId/eventos/:eventoId/formularios/respondidos', formularioController.getFormulariosRespondidosPorEvento);
 
+// Nova rota para obter formulários de um evento
+router.get('/eventos/:eventoId/formularios', formularioController.getFormulariosByEvento);
+
+
 module.exports = router;
