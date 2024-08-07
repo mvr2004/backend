@@ -26,7 +26,7 @@ const removeUserFromEvent = async (req, res, next) => {
     }
 };
 
-// Controlador para obter todos os utilizadores inscritos de um evento
+// Controlador para obter todos os usuários de um evento
 const getUsersByEvent = async (req, res, next) => {
     try {
         const { eventoId } = req.params;
@@ -38,7 +38,7 @@ const getUsersByEvent = async (req, res, next) => {
     }
 };
 
-// Controlador para obter todos os eventos criados por um utilizador
+// Controlador para obter todos os eventos de um usuário
 const getEventsByUser = async (req, res, next) => {
   try {
     const { utilizadorId } = req.params;
