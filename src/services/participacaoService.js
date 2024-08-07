@@ -59,14 +59,17 @@ const getEventsByUser = async (utilizadorId) => {
       include: {
         model: Utilizador,
         where: { id: utilizadorId },
-        through: { attributes: [] }
+        through: { attributes: [] } // Certifique-se de que isto está configurado corretamente
       }
     });
+    console.log('Eventos encontrados:', eventos); // Adicione este log para depuração
     return eventos;
   } catch (error) {
+    console.error('Erro ao obter eventos do usuário:', error); // Log de erro
     throw new Error('Erro ao obter eventos do usuário: ' + error.message);
   }
 };
+
 
 
 
