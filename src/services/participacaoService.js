@@ -55,6 +55,7 @@ const getUsersByEvent = async (eventoId) => {
 // Função para obter todos os eventos de um usuário
 const getEventsByUser = async (utilizadorId) => {
   try {
+    console.log('Fetching events for user:', utilizadorId); // Debugging line
     const eventos = await Evento.findAll({
       include: {
         model: Utilizador,
@@ -62,11 +63,14 @@ const getEventsByUser = async (utilizadorId) => {
         through: { attributes: [] }
       }
     });
+    console.log('Events fetched:', eventos); // Debugging line
     return eventos;
   } catch (error) {
+    console.error('Error in getEventsByUser:', error.message); // More descriptive error message
     throw new Error('Erro ao obter eventos do utilizador: ' + error.message);
   }
 };
+
 
 module.exports = {
     addUserToEvent,
