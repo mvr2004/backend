@@ -3,7 +3,7 @@ const sequelize = require('../configs/database');
 const Centro = require('./Centro');
 const bcrypt = require('bcrypt');
 
-const User = sequelize.define('Utilizador', {
+const Utilizador = sequelize.define('Utilizador', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -59,10 +59,10 @@ const User = sequelize.define('Utilizador', {
     // Inserir dados pré-definidos após a sincronização inicial
     afterSync: async () => {
       try {
-        const existingUsers = await User.count();
-        if (existingUsers === 0) {
+        const existingUtilizadors = await Utilizador.count();
+        if (existingUtilizadors === 0) {
           const salt = await bcrypt.genSalt(10);
-          await User.bulkCreate([
+          await Utilizador.bulkCreate([
             {
               nome: 'Marco Vicente',
               email: 'marcovicente@example.com',
@@ -211,12 +211,12 @@ const User = sequelize.define('Utilizador', {
           ]);
         }
       } catch (error) {
-        console.error('Erro ao inserir dados pré-definidos de User:', error);
+        console.error('Erro ao inserir dados pré-definidos de Utilizador:', error);
       }
     }
   }
 });
 
-User.belongsTo(Centro, { foreignKey: 'centroId' });
+Utilizador.belongsTo(Centro, { foreignKey: 'centroId' });
 
-module.exports = User;
+module.exports = Utilizador;
