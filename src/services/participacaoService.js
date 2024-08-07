@@ -59,7 +59,7 @@ const getEventsByUser = async (utilizadorId) => {
       include: {
         model: Utilizador,
         where: { id: utilizadorId },
-        through: { attributes: [] } // Excluir atributos da tabela de junção
+        through: { attributes: [] }
       }
     });
     return eventos;
