@@ -55,12 +55,15 @@ const getUsersByEvent = async (eventoId) => {
 // Função para obter todos os eventos de um usuário
 const getEventsByUser = async (utilizadorId) => {
   try {
-    const eventos = await Evento.findAll({
+    const participacoes = await ParticipacaoEvento.findAll({
+      where: { utilizadorId },
       include: {
-        model: Utilizador,
-        where: { id: utilizadorId }
+        model: Evento,
+        required: true // Ensure that the event is required in the join
       }
     });
+
+    const eventos = participacoes.map(participacao => participacao.Evento);
     return eventos;
   } catch (error) {
     throw new Error('Erro ao obter eventos do utilizador: ' + error.message);
