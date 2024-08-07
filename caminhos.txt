@@ -1,4 +1,0 @@
-
-FOTOS:
-base/uploads/reports/report1.jpg
-(exemplo report)
