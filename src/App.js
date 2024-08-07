@@ -1,5 +1,5 @@
 const express = require('express');
-const passport = require('./configs/passport');
+// const passport = require('./configs/passport');
 const session = require('express-session');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
@@ -74,10 +74,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 app.use(upload.single('file')); // Middleware para upload de arquivos
 
-// Configuração de sessões
-app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());
+// // Configuração de sessões
+// app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Middleware de tratamento de erros
 app.use(errorHandler);
