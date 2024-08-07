@@ -19,7 +19,7 @@ const ParticipacaoEvento = sequelize.define('ParticipacaoEvento', {
         }
     }
 }, {
-    timestamps: true,
+    timestamps: false,
     hooks: {
         afterSync: async () => {
             try {
