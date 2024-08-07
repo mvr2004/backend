@@ -52,9 +52,23 @@ const getEventById = async (req, res, next) => {
   }
 };
 
+// Controlador para buscar eventos por usuário
+const getEventsByUserId = async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const events = await eventService.getEventsByUserId(userId);
+    res.json({ events });
+  } catch (error) {
+    console.error('Erro ao buscar eventos por usuário:', error);
+    next(error);
+  }
+};
+
+
 module.exports = {
   createEvent,
   getAllEvents,
   getEventsByCentro,
   getEventById,
+   getEventsByUserId, 
 };

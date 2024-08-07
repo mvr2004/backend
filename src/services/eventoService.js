@@ -112,9 +112,20 @@ const getEventById = async (id) => {
   return event;
 };
 
+const getEventsByUserId = async (userId) => {
+  try {
+    const events = await Event.findAll({ where: { userId } });
+    return events;
+  } catch (error) {
+    console.error('Erro ao buscar eventos por usuário:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   createEvent,
   getAllEvents,
   getEventsByCentro,
   getEventById,
+  getEventsByUserId, 
 };
