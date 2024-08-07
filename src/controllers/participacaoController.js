@@ -39,19 +39,18 @@ const getUsersByEvent = async (req, res, next) => {
 };
 
 // Controlador para obter todos os eventos de um usuário
-const getEventsByUser = async (req, res, next) => {
+const getEventsByUser = async (utilizadorId) => {
   try {
-    const { utilizadorId } = req.params;
-    
-    if (!Number.isInteger(parseInt(utilizadorId))) {
-      return res.status(400).json({ error: 'Invalid user ID' });
-    }
-
-    const eventos = await participacaoService.getEventsByUser(utilizadorId);
-    res.json({ eventos });
+    const eventos = await Evento.findAll({
+      include: {
+        model: Utilizador,
+        where: { id: utilizadorId },
+        through: { attributes: [] } // Excluir atributos da tabela de junção
+      }
+    });
+    return eventos;
   } catch (error) {
-    console.error('Erro ao obter eventos do usuário:', error.message, error.stack);
-    next(error);
+    throw new Error('Erro ao obter eventos do usuário: ' + error.message);
   }
 };
 

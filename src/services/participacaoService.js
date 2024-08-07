@@ -58,7 +58,8 @@ const getEventsByUser = async (utilizadorId) => {
     const eventos = await Evento.findAll({
       include: {
         model: Utilizador,
-        where: { id: utilizadorId }
+        where: { id: utilizadorId },
+        through: { attributes: [] } // Excluir atributos da tabela de junção
       }
     });
     return eventos;
@@ -66,6 +67,7 @@ const getEventsByUser = async (utilizadorId) => {
     throw new Error('Erro ao obter eventos do usuário: ' + error.message);
   }
 };
+
 
 
 module.exports = {
