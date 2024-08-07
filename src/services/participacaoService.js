@@ -10,14 +10,14 @@ const addUserToEvent = async (utilizadorId, eventoId) => {
         // Verifica se o usuário existe
         const user = await Utilizador.findByPk(utilizadorId);
         if (!user) {
-            throw new Error('Usuário não encontrado com o ID fornecido.');
+            throw new Error('Utilizador não encontrado com o ID fornecido.');
         }
 
         // Cria a participação no evento
         const participacao = await ParticipacaoEvento.create({ utilizadorId, eventoId });
         return participacao;
     } catch (error) {
-        throw new Error('Erro ao adicionar usuário ao evento: ' + error.message);
+        throw new Error('Erro ao adicionar utilizador ao evento: ' + error.message);
     }
 };
 
@@ -32,7 +32,7 @@ const removeUserFromEvent = async (utilizadorId, eventoId) => {
             }
         });
     } catch (error) {
-        throw new Error('Erro ao remover usuário do evento: ' + error.message);
+        throw new Error('Erro ao remover utilizador do evento: ' + error.message);
     }
 };
 
@@ -48,7 +48,7 @@ const getUsersByEvent = async (eventoId) => {
         });
         return utilizadores;
     } catch (error) {
-        throw new Error('Erro ao obter usuários do evento: ' + error.message);
+        throw new Error('Erro ao obter utilizador do evento: ' + error.message);
     }
 };
 
@@ -58,16 +58,15 @@ const getEventsByUser = async (utilizadorId) => {
     const eventos = await Evento.findAll({
       include: {
         model: Utilizador,
-        through: { attributes: [] }, // Ignora atributos da tabela de junção
-        where: { id: utilizadorId } // Filtra pelo ID do usuário
+        where: { id: utilizadorId },
+        through: { attributes: [] }
       }
     });
     return eventos;
   } catch (error) {
-    throw new Error('Erro ao obter eventos do usuário: ' + error.message);
+    throw new Error('Erro ao obter eventos do utilizador: ' + error.message);
   }
 };
-
 
 module.exports = {
     addUserToEvent,
