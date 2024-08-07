@@ -36,7 +36,7 @@ const removeUserFromEvent = async (utilizadorId, eventoId) => {
     }
 };
 
-// Função para obter todos os usuários de um evento
+// Função para obter todos os utilizador de um evento
 const getUsersByEvent = async (eventoId) => {
     try {
         const utilizadores = await Utilizador.findAll({
@@ -48,25 +48,38 @@ const getUsersByEvent = async (eventoId) => {
         });
         return utilizadores;
     } catch (error) {
-        throw new Error('Erro ao obter usuários do evento: ' + error.message);
+        throw new Error('Erro ao obter utilizador do evento: ' + error.message);
     }
 };
 
 // Função para obter todos os eventos de um usuário
 const getEventsByUser = async (utilizadorId) => {
-  try {
-    const eventos = await Evento.findAll({
-      include: {
-        model: Utilizador,
-        where: { id: utilizadorId }
-      }
-    });
-    return eventos;
-  } catch (error) {
-    throw new Error('Erro ao obter eventos do usuário: ' + error.message);
-  }
-};
+    try {
+        // Verifica se o usuário existe
+        const user = await Utilizador.findByPk(utilizadorId);
+        if (!user) {
+            throw new Error('Usuário não encontrado com o ID fornecido.');
+        }
 
+        // Busca todos os eventos associados ao usuário através da tabela de participação
+        const participacoes = await ParticipacaoEvento.findAll({
+            where: { utilizadorId }
+        });
+
+        const eventosIds = participacoes.map(participacao => participacao.eventoId);
+
+        // Obtém todos os eventos com base nos IDs coletados
+        const eventos = await Evento.findAll({
+            where: {
+                id: eventosIds
+            }
+        });
+
+        return eventos;
+    } catch (error) {
+        throw new Error('Erro ao obter eventos do usuário: ' + error.message);
+    }
+};
 
 module.exports = {
     addUserToEvent,
