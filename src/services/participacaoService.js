@@ -36,7 +36,7 @@ const removeUserFromEvent = async (utilizadorId, eventoId) => {
     }
 };
 
-// Função para obter todos os usuários de um evento
+// Função para obter todos os utilizadores de um evento
 const getUsersByEvent = async (eventoId) => {
     try {
         const utilizadores = await Utilizador.findAll({
@@ -52,7 +52,7 @@ const getUsersByEvent = async (eventoId) => {
     }
 };
 
-// Função para obter todos os eventos de um usuário
+// Função para obter todos os eventos criados por um utilizador
 const getEventsByUser = async (utilizadorId) => {
   try {
     const eventos = await Evento.findAll({
