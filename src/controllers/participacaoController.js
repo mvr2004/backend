@@ -50,7 +50,6 @@ const getEventsByUser = async (req, res, next) => {
   }
 };
 
-
 module.exports = {
     addUserToEvent,
     removeUserFromEvent,
