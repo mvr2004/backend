@@ -58,8 +58,7 @@ const getEventsByUser = async (utilizadorId) => {
     const eventos = await Evento.findAll({
       include: {
         model: Utilizador,
-        where: { id: utilizadorId },
-        through: { attributes: [] } // Garante que atributos da tabela de junção não sejam incluídos
+        where: { id: utilizadorId }
       }
     });
     return eventos;

@@ -42,13 +42,20 @@ const getUsersByEvent = async (req, res, next) => {
 const getEventsByUser = async (req, res, next) => {
   try {
     const { utilizadorId } = req.params;
+    
+    if (!Number.isInteger(parseInt(utilizadorId))) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
     const eventos = await participacaoService.getEventsByUser(utilizadorId);
     res.json({ eventos });
   } catch (error) {
-    console.error('Erro ao obter eventos do usuário:', error);
+    console.error('Erro ao obter eventos do usuário:', error.message, error.stack);
     next(error);
   }
 };
+
+
 
 module.exports = {
     addUserToEvent,
