@@ -144,7 +144,11 @@ exports.getFormulariosByEvento = async (req, res) => {
     try {
         const { eventoId } = req.params;
         const formularios = await Formulario.findAll({
-            where: { eventoId }
+            where: { eventoId, ativo: true },
+            include: [{
+                model: CampoFormulario,
+                required: true
+            }]
         });
         res.json(formularios);
     } catch (error) {
