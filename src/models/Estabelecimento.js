@@ -42,6 +42,10 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
             key: 'id'
         }
     },
+	ativo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
     centroId: { 
         type: DataTypes.INTEGER,
         references: {
