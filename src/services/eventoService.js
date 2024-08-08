@@ -32,8 +32,7 @@ const createEvent = async (req, res, next) => {
       descricao,
       subareaId,
       utilizadorId,
-      centroId, 
-      ativo: false,
+      centroId
     });
 
     res.status(201).json({ event });
