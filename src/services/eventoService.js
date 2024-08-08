@@ -9,7 +9,7 @@ const moment = require('moment');
 // Função para criar um novo evento
 const createEvent = async (req, res, next) => {
   try {
-    const { nome, localizacao, data, hora, descricao, subareaId, utilizadorId, centroId } = req.body;
+    const { nome, localizacao, data, hora, descricao, subareaId, utilizadorId, centroId, ativo } = req.body;
 
     // Check if the user exists
     const userExists = await Utilizador.findByPk(utilizadorId);
@@ -32,7 +32,8 @@ const createEvent = async (req, res, next) => {
       descricao,
       subareaId,
       utilizadorId,
-      centroId
+      centroId, 
+      ativo
     });
 
     res.status(201).json({ event });
