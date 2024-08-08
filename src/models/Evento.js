@@ -32,7 +32,7 @@ const Evento = sequelize.define('Evento', {
     },
     ativo: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true
+        defaultValue: false
     },
     subareaId: {
         type: DataTypes.INTEGER,
