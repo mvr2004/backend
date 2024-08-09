@@ -69,7 +69,8 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
                             pago: true,
                             foto: 'https://backend-9hij.onrender.com/uploads/locais/restaurante.jpg',
                             subareaId: 14, 
-                            centroId: 1 
+                            centroId: 1,
+				ativo: true
                         },
                         {
                             nome: 'Ginasio - Academia RamboDaSanta',
@@ -79,7 +80,8 @@ const Estabelecimento = sequelize.define('Estabelecimento', {
                             pago: true,
                             foto: 'https://backend-9hij.onrender.com/uploads/locais/ginasio.jpg',
                             subareaId: 4, 
-                            centroId: 1 
+                            centroId: 1,
+				ativo: true
                         }
                     ]);
                 }
